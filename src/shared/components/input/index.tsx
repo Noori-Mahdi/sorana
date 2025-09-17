@@ -37,10 +37,11 @@ const Input = ({
   const inputRef = useRef<HTMLInputElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [isFocused, setIsFocused] = useState(false)
+  const [inputType, setInputType] = useState(type)
 
   return (
     <div
-      className={twMerge(`w-full relative`, label && 'my-4', classNameBox)}
+      className={twMerge(`w-full relative `, label && 'my-5', classNameBox)}
       onClick={() => {
         onClick?.()
         if (multiline) {
@@ -52,10 +53,8 @@ const Input = ({
     >
       <div
         className={twMerge(
-          'relative flex items-stretch text-base font-medium border px-2  rounded-tl-2xl rounded-br-2xl w-full cursor-text ',
-          !readOnly ? 'bg-transparent border-gray-100' : 'bg-gray-100 border-0',
-          error ? 'border-error' : 'border-primary-500',
-          hiddenBorder && 'border-transparent rounded-full',
+          'relative flex items-stretch text-sm md:text-base  border-transparent font-medium border px-2   rounded-3xl w-full cursor-text shadow-md shadow-primary-950',
+          !readOnly ? 'bg-primary-900 ' : 'bg-primary-700 cursor-not-allowed',
           type === 'textarea' ? 'items-start h-fit p-4' : 'h-14 items-center',
           classNameInput
         )}
@@ -64,14 +63,13 @@ const Input = ({
           {label && (
             <label
               className={twMerge(
-                'absolute select-none capitalize tracking-wide font-medium text-gray-500 text-sm flex items-center justify-between cursor-text w-fit px-1 transition-all duration-400',
-                error && 'text-error',
-                readOnly ? 'bg-transparent' : 'bg-white',
+                'absolute select-none capitalize tracking-wide font-medium text-gray-100 bg-transparent text-sm md:text-base flex items-center justify-between cursor-text w-fit px-1 transition-all duration-400',
+
                 (value !== null && value !== undefined && value !== '') ||
                   isFocused
                   ? multiline
-                    ? '-top-4 -translate-y-3 translate-x-1 scale-90'
-                    : 'top-0 -translate-y-3 translate-x-1 scale-90'
+                    ? '-top-4 -translate-y-3 -translate-x-2 scale-90 text-xs md:text-sm'
+                    : 'top-0 -translate-y-3 -translate-x-2 scale-90 text-xs md:text-sm'
                   : multiline
                   ? 'top-6 -translate-y-1'
                   : 'top-1/2 -translate-y-1/2 p-2',
@@ -114,7 +112,7 @@ const Input = ({
               id={name}
               readOnly={readOnly}
               name={name}
-              type={type}
+              type={inputType}
               required={required}
               value={value}
               onChange={onChange}
@@ -122,7 +120,7 @@ const Input = ({
               maxLength={maxLength}
               inputMode={inputMode}
               className={twMerge(
-                'grow text-gray-500 placeholder:select-none w-full text-right h-full border-gray-500 outline-0 text-lg transition-all duration-300 ease-in-out',
+                'grow text-gray-50 pr-3 selection:text-accent-500 placeholder:select-none w-full text-right h-full  outline-0 text-sm md:text-base transition-all duration-300 ease-in-out',
                 className
               )}
               onKeyDown={onKeyDown}
@@ -141,8 +139,16 @@ const Input = ({
               classNameSecondaryIcon
             )}
             onClick={(e) => {
-              e.stopPropagation()
-              onClickSecondaryIcon?.()
+              if (type !== 'password') {
+                e.stopPropagation()
+                onClickSecondaryIcon?.()
+              } else {
+                if (inputType === 'password') {
+                  setInputType('text')
+                } else {
+                  setInputType('password')
+                }
+              }
             }}
           >
             {secondaryIcon}
@@ -150,7 +156,7 @@ const Input = ({
         )}
       </div>
       {error && (
-        <div className=" select-none  text-error w-full flex gap-1 pr-3 items-center text-sm font-normal mt-1">
+        <div className=" select-none  text-accent-500 w-full flex gap-1 pr-3 items-center text-xs md:text-sm font-normal mt-2">
           <CiWarning />
           <span className="whitespace-normal truncate break-words">
             {error}

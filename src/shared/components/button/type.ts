@@ -6,6 +6,8 @@ export type TButtonProps = {
   color?:
     | 'primary'
     | 'primaryOutline'
+    | 'secandery'
+    | 'secanderyOutline'
     | 'danger'
     | 'dangerOutline'
     | 'warningOutline'
@@ -14,7 +16,7 @@ export type TButtonProps = {
     | 'mutedOutline'
     | 'transparent'
   size?: 'full' | 'small' | 'fit'
-  rounded?: 'full' | 'normal' | 'small' | 'none'
+  rounded?: 'full' | 'normal' | 'small' | 'none' | 'custome'
   disabled?: boolean
   className?: string
   animation?: boolean

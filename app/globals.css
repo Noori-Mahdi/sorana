@@ -6,24 +6,43 @@
 }
 
 @theme {
-  /* Primary */
-  --color-primary-50: oklch(96.2% 0.018 272.314);
-  --color-primary-100: oklch(93% 0.034 272.788);
-  --color-primary-200: oklch(87% 0.065 274.039);
-  --color-primary-300: oklch(78.5% 0.115 274.713);
-  --color-primary-400: oklch(67.3% 0.182 276.935);
-  --color-primary-500: oklch(58.5% 0.233 277.117);
-  --color-primary-600: oklch(51.1% 0.262 276.966);
-  --color-primary-700: oklch(45.7% 0.24 277.023);
-  --color-primary-800: oklch(39.8% 0.195 277.366);
-  --color-primary-900: oklch(35.9% 0.144 278.697);
-  --color-primary-950: oklch(25.7% 0.09 281.288);
+  /* Primary - برای المان‌های برجسته مثل دکمه‌ها */
+  --color-primary-50: #c0c0c0; /* روشن‌ترین */
+  --color-primary-100: #b8b8b8;
+  --color-primary-200: #a6a6a6;
+  --color-primary-300: #949494;
+  --color-primary-400: #828282;
+  --color-primary-500: #707070; /* پایه خاکستری متوسط */
+  --color-primary-600: #5e5e5e;
+  --color-primary-700: #4c4c4c;
+  --color-primary-800: #3b3b3b;
+  --color-primary-900: #2a2a2a;
+  --color-primary-950: #1b1b1b; /* تیره‌ترین */
 
-  --color-error: oklch(50.5% 0.213 27.518);
+  /* Accent / Action - نارنجی برای دکمه‌ها و progress */
+  --color-accent-50: #992b00; /* تیره‌ترین */
+  --color-accent-100: #b23300;
+  --color-accent-200: #cc3c00;
+  --color-accent-300: #e64400;
+  --color-accent-400: #ff4c00; /* اصلی نارنجی */
+  --color-accent-500: #ff661a;
+  --color-accent-600: #ff8040;
+  --color-accent-700: #ffa066;
+  --color-accent-800: #ffc199;
+  --color-accent-900: #ffe6d9; /* روشن‌ترین */
+
+  /* Error */
+  --color-error: #ff4c4c;
+
+  /* Background */
+  --color-bg-primary: #121212; /* پس‌زمینه کلی */
+  --color-bg-secondary: #1f1f1f; /* کارت‌ها و پنل‌ها */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #cccccc;
 }
 
 @layer utilities {
-  /* Background colors */
+  /* Primary colors */
   .bg-primary-50 {
     background-color: var(--color-primary-50);
   }
@@ -58,11 +77,6 @@
     background-color: var(--color-primary-950);
   }
 
-  .bg-error {
-    background-color: var(--color-error);
-  }
-
-  /* Text colors */
   .text-primary-50 {
     color: var(--color-primary-50);
   }
@@ -97,11 +111,6 @@
     color: var(--color-primary-950);
   }
 
-  .text-error {
-    color: var(--color-error);
-  }
-
-  /* Border colors */
   .border-primary-50 {
     border-color: var(--color-primary-50);
   }
@@ -136,11 +145,170 @@
     border-color: var(--color-primary-950);
   }
 
+  /* Accent / Action colors */
+  .bg-accent-50 {
+    background-color: var(--color-accent-50);
+  }
+  .bg-accent-100 {
+    background-color: var(--color-accent-100);
+  }
+  .bg-accent-200 {
+    background-color: var(--color-accent-200);
+  }
+  .bg-accent-300 {
+    background-color: var(--color-accent-300);
+  }
+  .bg-accent-400 {
+    background-color: var(--color-accent-400);
+  }
+  .bg-accent-500 {
+    background-color: var(--color-accent-500);
+  }
+  .bg-accent-600 {
+    background-color: var(--color-accent-600);
+  }
+  .bg-accent-700 {
+    background-color: var(--color-accent-700);
+  }
+  .bg-accent-800 {
+    background-color: var(--color-accent-800);
+  }
+  .bg-accent-900 {
+    background-color: var(--color-accent-900);
+  }
+
+  .text-accent-50 {
+    color: var(--color-accent-50);
+  }
+  .text-accent-100 {
+    color: var(--color-accent-100);
+  }
+  .text-accent-200 {
+    color: var(--color-accent-200);
+  }
+  .text-accent-300 {
+    color: var(--color-accent-300);
+  }
+  .text-accent-400 {
+    color: var(--color-accent-400);
+  }
+  .text-accent-500 {
+    color: var(--color-accent-500);
+  }
+  .text-accent-600 {
+    color: var(--color-accent-600);
+  }
+  .text-accent-700 {
+    color: var(--color-accent-700);
+  }
+  .text-accent-800 {
+    color: var(--color-accent-800);
+  }
+  .text-accent-900 {
+    color: var(--color-accent-900);
+  }
+
+  .border-accent-50 {
+    border-color: var(--color-accent-50);
+  }
+  .border-accent-100 {
+    border-color: var(--color-accent-100);
+  }
+  .border-accent-200 {
+    border-color: var(--color-accent-200);
+  }
+  .border-accent-300 {
+    border-color: var(--color-accent-300);
+  }
+  .border-accent-400 {
+    border-color: var(--color-accent-400);
+  }
+  .border-accent-500 {
+    border-color: var(--color-accent-500);
+  }
+  .border-accent-600 {
+    border-color: var(--color-accent-600);
+  }
+  .border-accent-700 {
+    border-color: var(--color-accent-700);
+  }
+  .border-accent-800 {
+    border-color: var(--color-accent-800);
+  }
+  .border-accent-900 {
+    border-color: var(--color-accent-900);
+  }
+
+  /* Error color */
+  .bg-error {
+    background-color: var(--color-error);
+  }
+  .text-error {
+    color: var(--color-error);
+  }
   .border-error {
     border-color: var(--color-error);
+  }
+
+  /* Background layers */
+  .bg-bg-primary {
+    background-color: var(--color-bg-primary);
+  }
+  .bg-bg-secondary {
+    background-color: var(--color-bg-secondary);
+  }
+  .text-text-primary {
+    color: var(--color-text-primary);
+  }
+  .text-text-secondary {
+    color: var(--color-text-secondary);
   }
 }
 
 input:-webkit-autofill {
   transition: background-color 5000s ease-in-out 0s !important;
+}
+
+.glassBox {
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* حذف فلش های input type number */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield; /* برای Firefox */
+}
+
+/* اسکرول بار باریک و رنگی */
+html {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: var(--color-accent-400) rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-accent-400);
+  border-radius: 4px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #ff3300; /* کمی پررنگ تر برای هاور */
 }

@@ -1,7 +1,7 @@
-import StorePage from "@/ui/store/page";
+import StorePage from '@/features/store/page'
 
 const Store = () => {
-    return ( <StorePage/> );
+  return <StorePage />
 }
- 
-export default Store;
+
+export default Store

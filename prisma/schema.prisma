@@ -15,15 +15,95 @@ datasource db {
 }
 
 enum Role {
+  owner
   admin
+  support
   user
 }
 
+enum ProductType {
+  frontRotor
+  frontBrake
+  rearRotor
+  rearBrake
+  parkingShoe
+}
+
+enum UserStatus {
+  online
+  offline
+}
+
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  phone     String   @unique
-  password  String
-  role      Role     @default(user)
+  id           String     @id @default(uuid())
+  userName     String
+  userPhone    String     @unique
+  password     String
+  companyName  String?
+  companyphone String?
+  image        String?
+  addrace      String?
+  email        String?
+  comments     Comment[]  @relation("UserComments")
+  buy          Sold[]     @relation("UserBuys")
+  role         Role       @default(user)
+  ban          Boolean    @default(false)
+  status       UserStatus @default(offline)
+  lastLogin    DateTime?
+  createdAt    DateTime   @default(now())
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  rate      Int?
+  report    Boolean  @default(false)
   createdAt DateTime @default(now())
+
+  user   User   @relation("UserComments", fields: [userId], references: [id])
+  userId String
+}
+
+model Sold {
+  id          String   @id @default(uuid())
+  productName String
+  quantity    Int      @default(1)
+  price       Float
+  user        User     @relation("UserBuys", fields: [userId], references: [id])
+  userId      String
+  createdAt   DateTime @default(now())
+}
+
+model Car {
+  id        String    @id @default(uuid())
+  series    String    @unique
+  fromYear  DateTime?
+  toYear    DateTime?
+  body      String?
+  brakes    Product[] @relation("CarBrakes")
+  imageCar  String?
+  companyId String
+  company   Company   @relation(fields: [companyId], references: [id])
+}
+
+model Company {
+  id    String @id @default(uuid())
+  name  String @unique
+  image String
+  cars  Car[]
+}
+
+model Product {
+  id                String      @id @default(uuid())
+  name              String
+  type              ProductType
+  length            String?
+  width             String?
+  mainTechnicalCode String?
+  FMSITechnicalCode String?
+  HIQTechnicalCode  String?
+  WVATechnicalCode  String?
+  image             String?
+  cars              Car[]       @relation("CarBrakes")
 }

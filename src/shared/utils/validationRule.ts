@@ -8,7 +8,7 @@ export const validateFormValues = (
   type: string,
   value: string
 ): TValidationResult => {
-  if (type === 'phone') {
+  if (type === 'userPhone') {
     if (!/^\d+$/.test(value)) {
       return { type: false, message: 'فقط اعداد مجاز هستند' }
     }

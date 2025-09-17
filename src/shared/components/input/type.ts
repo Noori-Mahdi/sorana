@@ -1,7 +1,7 @@
 import { TFakeEvent } from "@/shared/types/types";
 
 export type TInputProps = {
-  type: "text" | "textarea";
+  type: "text" | "textarea" | "password";
   name: string;
   value?: string | number ;
   label?: string;

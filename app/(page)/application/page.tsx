@@ -1,7 +1,7 @@
-import ApplicationPage from "@/ui/applicationPage/page";
+import ApplicationPage from '@/features/applicationPage/page'
 
 const Application = () => {
-    return ( <ApplicationPage/> );
+  return <ApplicationPage />
 }
- 
-export default Application;
+
+export default Application

@@ -18,19 +18,23 @@ const Button = ({
   buttomSecondIcon,
 }: TButtonProps) => {
   const btnColor = {
-    primary: 'text-white  bg-primary-600 hover:bg-primary-700',
-    primaryOutline: 'text-primary-300 bg-white border border-primary-00',
+    primary: 'text-white  bg-accent-300  hover:bg-accent-400',
+    primaryOutline: 'text-primary-300 bg-white border border-primary-400',
+    secandery: 'text-gray-50 bg-primary-600 hover:bg-primary-700',
+    secanderyOutline: 'text-gray-50 border border-gray-50',
     danger: 'text-white hover:bg-red-600 bg-red-500', // می‌تونی این رو هم به کلاس دلخواه تغییر بدی اگر تعریف کردی
     dangerOutline: 'text-red-600 bg-white border border-red-600', // مشابه بالا
     warning: 'text-white bg-amber-500 hover:bg-yellow-500', // اگر کلاس‌های دلخواه داری جایگزین کن
     warningOutline: 'text-amber-500 bg-white border border-amber-500',
     muted: 'text-mute bg-gray-300 hover:bg-gray-200', // استفاده از کلاس‌های سفارشی
     mutedOutline: 'border border-gray-300 text-mute bg-white',
-    transparent: 'bg-transparent text-neutral-500 border border-neutral-500',
+    transparent:
+      'bg-transparent text-gray-500 border border-transparent hover:border-gray-300 ',
   }
 
   const btnRounded = {
-    full: 'rounded-tl-xl rounded-bl-4xl rounded-br-xl rounded-tr-4xl',
+    custome: 'rounded-tl-xl rounded-bl-4xl rounded-br-xl rounded-tr-4xl',
+    full: 'rounded-full',
     normal: 'rounded-lg',
     small: 'rounded-md',
     none: '',
@@ -38,12 +42,12 @@ const Button = ({
   const btnSize = {
     full: 'w-full h-fit',
     fit: 'w-fit h-fit',
-    small: 'w-8 h-8',
+    small: 'w-6 h-6',
   }
   return (
     <button
       className={twMerge(
-        'flex justify-center items-center gap-2 py-3 font-semibold ',
+        'flex justify-center items-center gap-2 py-3 shadow-md select-none ',
         btnSize[size],
         btnRounded[rounded],
         btnColor[color],
@@ -81,7 +85,7 @@ const Button = ({
       ) : (
         <>
           {buttomIcon && <span>{buttomIcon}</span>}
-          {label && <span className="font-normal">{label}</span>}
+          {label && <span>{label}</span>}
           {buttomSecondIcon && <span>{buttomSecondIcon}</span>}
         </>
       )}

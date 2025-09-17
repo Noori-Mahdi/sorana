@@ -1,4 +1,4 @@
-import ResetPasswordPage from "@/ui/auth/resetPasswordPage/page"
+import ResetPasswordPage from '@/features/auth/resetPasswordPage/page'
 
 const Register = () => {
   return <ResetPasswordPage />

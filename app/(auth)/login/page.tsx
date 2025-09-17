@@ -1,4 +1,4 @@
-import LoginPage from '@/ui/auth/loginPage/page'
+import LoginPage from '@/features/auth/loginPage/page'
 
 const Login = () => {
   return <LoginPage />
