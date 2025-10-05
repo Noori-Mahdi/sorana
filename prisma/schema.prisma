@@ -96,7 +96,7 @@ model Company {
 
 model Product {
   id                String      @id @default(uuid())
-  name              String
+  name              String      @unique
   type              ProductType
   length            String?
   width             String?
@@ -104,6 +104,6 @@ model Product {
   FMSITechnicalCode String?
   HIQTechnicalCode  String?
   WVATechnicalCode  String?
-  image             String?
+  image             String
   cars              Car[]       @relation("CarBrakes")
 }

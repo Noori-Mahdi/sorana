@@ -7,7 +7,7 @@ import { TRegisterResponse } from '@/features/auth/registerPage/types/type'
 export async function getCompany(): Promise<TRegisterResponse> {
   try {
     const data = await prisma.company.findMany({
-      select: { id: true, name: true },
+      select: { id: true, name: true, image: true },
     })
     return { type: 'success', data: data, message: 'کمپانی با موفقیت اضافه شد' }
   } catch (error) {
@@ -35,7 +35,7 @@ export async function createCompany(
       return { type: 'error', errors: { name: 'این کمپانی قبلا ساخته شده' } }
 
     // ساخت مسیر ذخیره‌سازی
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
+    const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'company')
     if (!fs.existsSync(uploadsDir))
       fs.mkdirSync(uploadsDir, { recursive: true })
 
@@ -46,7 +46,7 @@ export async function createCompany(
     const buffer = Buffer.from(arrayBuffer)
     await fs.promises.writeFile(filePath, buffer)
 
-    const imageUrl = `/uploads/${fileName}`
+    const imageUrl = `/uploads/company/${fileName}`
 
     await prisma.company.create({ data: { name, image: imageUrl } })
     return { type: 'success', message: 'کمپانی با موفقیت اضافه شد' }

@@ -12,7 +12,7 @@ const Container = ({
   return (
     <div
       className={twMerge(
-        "p-5",
+        "md:p-5 p-3 py-5",
         className,
         removeSpaceBottom && "pb-0",
         removeSpaceTop && "pt-0",

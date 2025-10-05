@@ -15,17 +15,19 @@ export type TCar = {
   fromYear: Date | null
   toYear: Date | null
   body: string | null
+  imageCar: string | null
 }
 
 export type TCarWithCompany = TCar & {
   companyName: string
+  image: string
 }
 
 export async function getCar(): Promise<TResponse<TCarWithCompany[]>> {
   try {
     const cars = await prisma.car.findMany({
       include: {
-        company: { select: { name: true } },
+        company: { select: { name: true, image: true } },
       },
     })
 
@@ -35,7 +37,9 @@ export async function getCar(): Promise<TResponse<TCarWithCompany[]>> {
       fromYear: car.fromYear,
       toYear: car.toYear,
       body: car.body,
+      imageCar: car.imageCar,
       companyName: car.company.name,
+      image: car.company.image,
     }))
 
     return { type: 'success', data: formattedCars }
@@ -48,7 +52,7 @@ export async function getCar(): Promise<TResponse<TCarWithCompany[]>> {
 export async function getCompany(): Promise<TRegisterResponse> {
   try {
     const data = await prisma.company.findMany({
-      select: { id: true, name: true },
+      select: { id: true, name: true, image: true },
     })
     return { type: 'success', data: data, message: 'کمپانی با موفقیت اضافه شد' }
   } catch (error) {
@@ -74,7 +78,6 @@ export async function createCar(
   const parkingShoe = formData.get('parkingShoe') as string | null
   const file = formData.get('image') as File | null
 
-
   if (!companyId) errors.companyId = 'انتخاب کمپانی اجباری است'
   if (!series) errors.series = 'وارد کردن نام مدل اجباری است'
   if (Object.keys(errors).length > 0) return { type: 'error', errors }
@@ -86,7 +89,7 @@ export async function createCar(
 
     let imageUrl: string | null = null
     if (file) {
-      const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
+      const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'car')
       if (!fs.existsSync(uploadsDir))
         fs.mkdirSync(uploadsDir, { recursive: true })
 
@@ -96,7 +99,7 @@ export async function createCar(
       const buffer = Buffer.from(arrayBuffer)
       await fs.promises.writeFile(filePath, buffer)
 
-      imageUrl = `/uploads/${fileName}`
+      imageUrl = `/uploads/car/${fileName}`
     }
 
     await prisma.car.create({

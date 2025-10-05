@@ -14,9 +14,9 @@ const ReturnButton = ({ className }: TReturnButtonProps) => {
   return (
     <Button
       type="button"
-      buttomIcon={<IoIosArrowForward size={20}/>}
+      buttomIcon={<IoIosArrowForward size={15}/>}
       onClick={() => router.back()}
-      className={`w-10 h-10 py-1 rounded-full gap-0 text-sm font-medium ${className}`}
+      className={`w-9 h-9 py-1 rounded-full gap-0 text-sm font-medium ${className}`}
       color="secandery"
     ></Button>
   )

@@ -1,7 +1,7 @@
-import UserManagementPage from '@/features/admin-panel/components/userManagement'
+import UserMangementPage from "@/features/admin-panel/components/user/userMangement"
 
 const UserManagement = () => {
-  return <UserManagementPage />
+  return <UserMangementPage />
 }
 
 export default UserManagement

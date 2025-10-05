@@ -1,11 +1,25 @@
 'use server'
 
 import prisma from '@/shared/utils/db'
+import fs from 'fs'
+import path from 'path'
 
 export type TUser = {
   id: string
+  userName: string
   userPhone: string
-  userName: string | null
+  companyName?: string | null
+  companyphone?: string | null
+  image?: string | null
+  addrace?: string | null
+  email?: string | null
+  role: 'owner' | 'admin' | 'support' | 'user'
+  ban: boolean
+  comments?: number
+  buy?: number
+  status: 'online' | 'offline'
+  lastLogin: Date | null
+  createdAt: Date
 }
 
 export type TResponse<T> =
@@ -18,29 +32,33 @@ export async function getUsers(): Promise<TResponse<TUser[]>> {
     const users = await prisma.user.findMany({
       select: {
         id: true,
-        userPhone: true,
         userName: true,
+        userPhone: true,
+        companyName: true,
+        companyphone: true,
+        image: true,
+        addrace: true,
+        email: true,
+        role: true,
+        ban: true,
+        status: true,
+        lastLogin: true,
+        createdAt: true,
+        comments: { select: { id: true } },
+        buy: { select: { id: true } },
       },
     })
-    return { type: 'success', data: users }
+
+    const formatted: TUser[] = users.map((u) => ({
+      ...u,
+      comments: u.comments.length,
+      buy: u.buy.length,
+    }))
+
+    return { type: 'success', data: formatted }
   } catch (err) {
     console.error(err)
     return { type: 'error', errors: { general: 'خطا در دریافت کاربران' } }
-  }
-}
-
-// گرفتن یک کاربر با id
-export async function getUserById(id: string): Promise<TResponse<TUser>> {
-  try {
-    const user = await prisma.user.findUnique({
-      where: { id },
-      select: { id: true, userPhone: true, userName: true },
-    })
-    if (!user) return { type: 'error', errors: { general: 'کاربر پیدا نشد' } }
-    return { type: 'success', data: user }
-  } catch (err) {
-    console.error(err)
-    return { type: 'error', errors: { general: 'خطا در دریافت کاربر' } }
   }
 }
 
@@ -58,18 +76,47 @@ export async function deleteUser(id: string): Promise<TResponse<null>> {
 // ویرایش کاربر
 export async function updateUser(
   id: string,
-  data: Partial<{ name: string; phone: string }>
+  data: Partial<{
+    createdAt: Date
+    lastLogin: Date
+    ban: boolean
+    role: 'owner' | 'admin' | 'support' | 'user'
+    email: string
+    userName: string
+    userPhone: string
+    companyName: string
+    companyphone: string
+    imageFile: File
+    addrace: string
+  }>
 ): Promise<TResponse<TUser>> {
   try {
+    let imageUrl: string | undefined
+
+    if (data.imageFile) {
+      const uploadsDir = path.join(process.cwd(), 'public', 'uploads')
+      if (!fs.existsSync(uploadsDir))
+        fs.mkdirSync(uploadsDir, { recursive: true })
+
+      const fileName = `${Date.now()}-${data.imageFile.name}`
+      const filePath = path.join(uploadsDir, fileName)
+      const buffer = Buffer.from(await data.imageFile.arrayBuffer())
+      await fs.promises.writeFile(filePath, buffer)
+
+      imageUrl = `/uploads/${fileName}`
+    }
+
     const updated = await prisma.user.update({
       where: { id },
-      data,
-      select: { id: true, userPhone: true, userName: true },
+      data: {
+        ...data,
+        image: imageUrl ?? undefined,
+      },
     })
+
     return { type: 'success', data: updated }
   } catch (err) {
     console.error(err)
     return { type: 'error', errors: { general: 'خطا در ویرایش کاربر' } }
   }
 }
-

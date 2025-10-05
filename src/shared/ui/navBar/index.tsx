@@ -17,27 +17,39 @@ const NavBar = ({ className }: TNavBarProps) => {
   const [open, setOpen] = useState(false)
 
   const links = [
-    { href: '/', label: 'خانه' },
-    { href: '/store', label: 'فروشگاه' },
-    { href: '/application', label: 'اپلیکیشن' },
-    { href: '/aboutUs', label: 'درباره ما' },
-    { href: '/adminPanel', label: 'پنل ادمین' },
+    { href: '/', label: 'خانه', subHref: ['/'] },
+    { href: '/store', label: 'فروشگاه', subHref: ['/store'] },
+    { href: '/application', label: 'اپلیکیشن', subHref: ['/application'] },
+    { href: '/aboutUs', label: 'درباره ما', subHref: ['/aboutUs'] },
+    {
+      href: '/adminPanel',
+      label: 'پنل ادمین',
+      subHref: [
+        '/userManagement',
+        '/carManagement',
+        '/productManagement',
+        '/soldManagement',
+      ],
+    },
   ]
 
-  const isLinkActive = (href: string, pathname: string) => {
-    if (href === '/') return pathname === '/'
-    return pathname.startsWith(href)
+  const isLinkActive = (subHref: string[], pathname: string) => {
+    if (subHref.length === 1 && subHref[0] === '/') {
+      return pathname === '/'
+    }
+
+    return subHref.some((path) => pathname.startsWith(path))
   }
 
   return (
     <nav className="relative">
       <ul className={twMerge(`hidden md:flex gap-4 text-sm`, className)}>
-        {links.map(({ href, label }) => (
+        {links.map(({ href, label, subHref }) => (
           <li key={href}>
             <Link
               href={href}
               className={`cursor-pointer border-b-2 p-1 text-gary-50 border-transparent ${
-                isLinkActive(href, pathname)
+                isLinkActive(subHref, pathname)
                   ? 'border-accent-400 font-bold'
                   : ' hover:border-accent-500'
               }`}

@@ -16,54 +16,56 @@ const MobileNav = ({ className }: TMobileNavProps) => {
 
   const items = [
     {
-      icon: <IoHome className=" w-7 h-7" />,
+      icon: <IoHome className=" w-6 h-6" />,
       label: 'خانه',
       href: '/',
+      subHref: [''],
     },
     {
-      icon: <FaShoppingBasket className=" w-7 h-7" />,
+      icon: <FaShoppingBasket className=" w-6 h-6" />,
       label: 'سبد',
       href: '/store',
+      subHref: ['/store'],
     },
     {
-      icon: <AiOutlineProduct className=" w-7 h-7" />,
+      icon: <AiOutlineProduct className=" w-6 h-6" />,
       label: 'اپلیکشین',
       href: '/application',
+      subHref: ['/application'],
     },
     {
-      icon: <IoPerson className=" w-7 h-7" />,
+      icon: <IoPerson className=" w-6 h-6" />,
       label: 'پروفایل',
       href: '/userManagement',
+      subHref: [
+        '/userManagement',
+        '/carManagement',
+        '/productManagement',
+        '/soldManagement',
+      ],
     },
   ]
 
   return (
     <nav
       className={twMerge(
-        'fixed bottom-1 left-1 shadow shadow-primary-900 right-1 z-20 rounded-full bg-bg-primary/90 py-3 backdrop-blur-md px-2 xs:px-4',
+        'fixed bottom-1 left-1 shadow shadow-primary-900 right-1 z-20 rounded-full bg-bg-primary/90 py-2 backdrop-blur-md px-2 xs:px-4',
         className
       )}
     >
       <ul className="flex justify-center gap-2 xs:gap-3 items-center  w-full">
-        {items.map(({ icon, label, href }) => {
-          const active = pathname === href
+        {items.map(({ icon, label, href, subHref }) => {
+          const active = subHref?.includes(pathname)
           return (
             <li
               key={label}
               onClick={() => router.push(href)}
               className={twMerge(
                 'flex flex-col items-center xs:gap-1 p-1 xs:p-2 text-gray-300 cursor-pointer rounded-full  transition-all duration-300',
-                active && 'text-accent-400 -translate-y-8 '
+                active && 'text-accent-400'
               )}
             >
-              <div
-                className={twMerge(
-                  'p-3',
-                  active && 'bg-bg-primary rounded-full'
-                )}
-              >
-                {icon}
-              </div>
+              <div className={twMerge('p-3')}>{icon}</div>
             </li>
           )
         })}

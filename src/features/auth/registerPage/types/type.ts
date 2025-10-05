@@ -5,5 +5,6 @@ export type TRegisterResponse = {
   data?: {
     name: string
     id: string
+    image: string
   }[]
 }

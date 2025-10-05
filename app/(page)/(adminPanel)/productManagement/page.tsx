@@ -1,4 +1,4 @@
-import ProductManagementPage from "@/features/admin-panel/components/productManagement";
+import ProductManagementPage from "@/features/admin-panel/components/product/productManagement";
 
 const ProductManagement = () => {
     return ( <ProductManagementPage/> );

@@ -20,7 +20,7 @@ const AddButton = () => {
         buttomIcon={<BiPlus />}
         type="button"
         rounded="full"
-        className="w-10 h-10 right-4 fixed bottom-24"
+        className="w-10 h-10 m-2  sticky bottom-22 md:bottom-0 "
         onClick={() => setShow(true)}
       />
       <Modal
