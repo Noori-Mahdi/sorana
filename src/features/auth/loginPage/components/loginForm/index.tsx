@@ -3,21 +3,49 @@ import Input from '@/shared/components/input'
 import Button from '@/shared/components/button'
 import { useState } from 'react'
 import { TFakeEvent } from '@/shared/types/types'
+import { FaPhoneAlt } from 'react-icons/fa'
+import { IoEye } from 'react-icons/io5'
 import { loginUser } from '../../action/action'
-import { runValidation } from '@/shared/utils/validation'
+import { updateFormErrors } from '@/shared/utils/updateFormErrors'
+import { useToast } from '@/shared/context/ToastContext'
 import { useRouter } from 'next/navigation'
+import { TLoginFormValues } from '../../types/type'
 
-type TField = { value: string; error: string | null }
-type TFormValue = Record<string, TField>
+
 
 const LoginForm = () => {
-  const [formValue, setFormValue] = useState<TFormValue>({
-    userPhone: { value: '', error: null },
-    password: { value: '', error: null },
-  })
-  const [loading, setLoading] = useState(false)
+  const initial = {
+    userPhone: { value: null },
+    password: { value: null },
+  }
 
+  const [formValue, setFormValue] = useState<TLoginFormValues>(initial)
+  const [loading, setLoading] = useState(false)
+  const { addToast } = useToast()
   const router = useRouter()
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setLoading(true)
+    const loginData = new FormData(e.currentTarget)
+    try {
+      const res = await loginUser(loginData)
+      if (res.type === 'error') {
+        if (res.errors.general) {
+          addToast(res.errors.general[0], 'error')
+        } else {
+          setFormValue((prev) => updateFormErrors(prev, res.errors))
+        }
+      } else {
+        setFormValue(initial)
+        router.push('/')
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement> | TFakeEvent
@@ -29,67 +57,29 @@ const LoginForm = () => {
     }))
   }
 
-  const handleBlur = (e: React.ChangeEvent<HTMLInputElement> | TFakeEvent) => {
-    const { name, value } = e.target
-    const result = runValidation(name, value)
-    setFormValue((prev) => ({
-      ...prev,
-      [name]: result,
-    }))
-  }
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setLoading(true)
-    const formData = new FormData(e.currentTarget)
-
-    try {
-      const res = await loginUser(formData)
-      if (res.type === 'error' && res.errors) {
-        setFormValue((prev) => {
-          const updated: TFormValue = { ...prev }
-
-          Object.keys(res.errors ?? {}).forEach((key) => {
-            if (key in updated) {
-              updated[key as keyof TFormValue].error = res.errors![key]
-            }
-          })
-
-          return updated
-        })
-      } else {
-        setFormValue({
-          userPhone: { value: '', error: null },
-          password: { value: '', error: null },
-        })
-        router.push('/')
-      }
-    } catch (err) {
-      console.error(err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
   return (
-    <form className="my-24" onSubmit={handleSubmit}>
+    <form className="my-10" onSubmit={handleSubmit}>
       <Input
         name="userPhone"
+        validationType="phone"
         type="text"
+        inputIcon={<FaPhoneAlt />}
         label="شماره همراه"
-        value={formValue?.['userPhone'].value}
-        error={formValue?.['userPhone'].error}
+        value={formValue?.userPhone.value}
+        error={formValue?.userPhone.error}
         maxLength={11}
         onChange={handleChange}
-        onBlur={handleBlur}
         required
       />
       <Input
         name="password"
-        type="text"
+        type="password"
+        secondaryIcon={
+          <IoEye className="hover:text-accent-400 cursor-pointer text-gray-50" />
+        }
         label="رمز ورود"
-        value={formValue?.['password'].value ?? null}
-        error={formValue?.['password'].error}
+        value={formValue?.password.value}
+        error={formValue?.password.error}
         onChange={handleChange}
         required
       />

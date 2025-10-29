@@ -312,3 +312,13 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #ff3300; /* کمی پررنگ تر برای هاور */
 }
+
+.diagonal-gradient-soft {
+  background-image: linear-gradient(
+    to bottom right,
+    var(--color-primary-950) 0%,
+    var(--color-primary-900) 70%,
+    var(--color-primary-800) 100%
+  );
+}
+

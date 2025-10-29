@@ -3,9 +3,13 @@ import Button from '@/shared/components/button'
 import { IoEye, IoTrash } from 'react-icons/io5'
 import { BiEdit } from 'react-icons/bi'
 
-const ActionButtons = () => {
+type TActionButtonsProps = {
+  onClick: (mode: 'view' | 'edit' | 'delete') => void
+}
+
+const ActionButtons = ({ onClick }: TActionButtonsProps) => {
   return (
-    <div className="flex justify-between items-center gap-2 pt-3">
+    <div className="flex items-center justify-between gap-2 pt-3">
       <div className="flex gap-3">
         <Button
           buttomIcon={<IoEye />}
@@ -13,6 +17,7 @@ const ActionButtons = () => {
           size="small"
           rounded="full"
           type="button"
+          onClick={() => onClick('view')}
         />
         <Button
           buttomIcon={<BiEdit />}
@@ -20,6 +25,7 @@ const ActionButtons = () => {
           size="small"
           rounded="full"
           type="button"
+          onClick={() => onClick('edit')}
         />
       </div>
 
@@ -29,6 +35,7 @@ const ActionButtons = () => {
         size="small"
         rounded="full"
         type="button"
+        onClick={() => onClick('delete')}
       />
     </div>
   )

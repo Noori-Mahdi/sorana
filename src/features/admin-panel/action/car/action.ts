@@ -23,13 +23,31 @@ export type TCarWithCompany = TCar & {
   image: string
 }
 
-export async function getCar(): Promise<TResponse<TCarWithCompany[]>> {
+export async function getCar(
+  id?: string
+): Promise<TResponse<TCarWithCompany[]>> {
   try {
-    const cars = await prisma.car.findMany({
-      include: {
-        company: { select: { name: true, image: true } },
-      },
-    })
+    let cars
+
+    if (id) {
+      // گرفتن فقط یک ماشین با id مشخص
+      const car = await prisma.car.findUnique({
+        where: { id },
+        include: {
+          company: { select: { name: true, image: true } },
+        },
+      })
+
+      cars = car ? [car] : [] // اگر پیدا نشد آرایه خالی برگرده
+    } else {
+      // گرفتن 10 ماشین اول
+      cars = await prisma.car.findMany({
+        take: 10,
+        include: {
+          company: { select: { name: true, image: true } },
+        },
+      })
+    }
 
     const formattedCars: TCarWithCompany[] = cars.map((car) => ({
       id: car.id,

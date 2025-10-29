@@ -1,3 +1,4 @@
+import ContextProviders from '@/shared/context/ContextProvider/provider'
 import './globals.css'
 
 export default function RootLayout({
@@ -7,7 +8,9 @@ export default function RootLayout({
 }>) {
   return (
     <html dir="rtl" lang="fa">
-      <body className="bg-bg-secondary min-h-screen text-gray-50">{children}</body>
+      <body className="bg-bg-secondary min-h-screen text-gray-50">
+        <ContextProviders>{children}</ContextProviders>
+      </body>
     </html>
   )
 }

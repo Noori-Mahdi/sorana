@@ -1,34 +1,36 @@
-import Container from '@/shared/components/container'
 import LoginForm from '../components/loginForm'
-import Link from 'next/link'
+import ImageBox from '@/shared/components/ImageBox'
+import TextWhitLink from '@/shared/components/TextWithLink'
 
 const LoginPage = () => {
   return (
     <>
-      <div className=" text-center text-xl md:text-2xl text-gray-50  font-bold">
-        ورود به حساب کاربری
-      </div>
+      <div className=""></div>
+      <ImageBox
+        imageAlt="Logo"
+        imageHidth={80}
+        imageWeight={80}
+        imageClassName="flex items-center justify-center gap-1 select-none"
+        imageURL="/logo/logo.png"
+        labelContent="ورود به اکانت"
+        labelClassName="font-semibold text-xl"
+        parentClassName="flex flex-col items-center cursor-auto  justify-center gap-2"
+      />
       <LoginForm />
-      <div className='flex flex-col'>
-        <div className="text-center my-4 text-xs md:text-sm text-gray-50">
-          <span> حساب کاربری فعال نداری؟ </span>
-          <Link
-            className=" font-medium text-accent-400 cursor-pointer hover:text-accent-500 ml-1"
-            href={'/register'}
-          >
-            ساختن حساب کاربری
-          </Link>
-        </div>
-        <div className="text-center my-4 text-xs md:text-sm text-gray-50 mt-2 flex justify-center gap-1">
-          <span>رمز عبور خود را فراموش کرده‌اید؟</span>
-          <Link
-            className=" font-medium text-accent-400  cursor-pointer hover:text-accent-500"
-            href="/resetPassword"
-          >
-            بازیابی کنید
-          </Link>
-        </div>
-      </div>
+      <TextWhitLink
+        linkContant="ساختن حساب کاربری"
+        linkHREF="/register"
+        linkClassName="text-accent-400 hover:text-accent-500 ml-1 cursor-pointer font-medium"
+        parentClassName="flex items-center justify-center my-4 text-center text-xs text-gray-50 md:text-sm"
+        textContant="حساب کاربری فعال نداری؟"
+      />
+      <TextWhitLink
+        linkContant="بازیابی کنید"
+        linkHREF="/resetPassword"
+        linkClassName="text-accent-400 hover:text-accent-500 ml-1 cursor-pointer font-medium"
+        parentClassName="flex items-center justify-center my-4 text-center text-xs text-gray-50 md:text-sm"
+        textContant="رمز عبور خود را فراموش کرده‌اید؟"
+      />
     </>
   )
 }

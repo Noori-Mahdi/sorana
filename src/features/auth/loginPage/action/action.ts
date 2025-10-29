@@ -3,17 +3,17 @@
 import prisma from '@/shared/utils/db'
 import bcrypt from 'bcryptjs'
 import { cookies } from 'next/headers'
-import { TLoginResponse } from '../types/type'
+import { TLoginInputKeys, TLoginResponse } from '../types/type'
 import jwt from 'jsonwebtoken'
 
 export async function loginUser(formData: FormData): Promise<TLoginResponse> {
-  const errors: Record<string, string> = {}
+  const errors: Partial<Record<TLoginInputKeys | 'general', string[]>> = {}
 
   const userPhone = formData.get('userPhone') as string
   const password = formData.get('password') as string
 
-  if (!userPhone) errors.userPhone = 'وارد کردن شماره همراه اجباری'
-  if (!password) errors.password = 'وارد کردن رمز اجباری'
+  if (!userPhone) errors.userPhone = ['وارد کردن شماره همراه اجباری']
+  if (!password) errors.password = ['وارد کردن رمز اجباری']
 
   if (Object.keys(errors).length > 0) {
     return { type: 'error', errors }
@@ -25,13 +25,13 @@ export async function loginUser(formData: FormData): Promise<TLoginResponse> {
     })
 
     if (!user) {
-      errors.phone = 'این شماره همراه قبلا ثبت نام نشده'
+      errors.userPhone = ['این شماره همراه قبلا ثبت نام نشده']
       return { type: 'error', errors }
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password)
     if (!isPasswordValid) {
-      errors.password = 'رمز عبور اشتباه است'
+      errors.password = ['رمز عبور اشتباه است']
       return { type: 'error', errors }
     }
 
@@ -48,7 +48,7 @@ export async function loginUser(formData: FormData): Promise<TLoginResponse> {
       value: token,
       path: '/',
       httpOnly: true,
-      maxAge: 60 * 60 * 24, // 1 روز
+      maxAge: 60 * 60 * 24,
     })
 
     return {
@@ -59,7 +59,7 @@ export async function loginUser(formData: FormData): Promise<TLoginResponse> {
     console.error('Login error:', err)
     return {
       type: 'error',
-      errors: { general: 'خطای غیرمنتظره‌ای رخ داد. لطفاً دوباره تلاش کنید.' },
+      errors: { general: ['خطای غیرمنتظره‌ای رخ داد. لطفاً دوباره تلاش کنید.'] },
     }
   }
 }

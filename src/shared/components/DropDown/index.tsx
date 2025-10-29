@@ -2,14 +2,27 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { TDropDownProps } from './type'
 import { IoIosArrowDown } from 'react-icons/io'
 import { TiWarningOutline } from 'react-icons/ti'
+import Image from 'next/image'
+import CustomCheckbox from '../CheckBox'
+import SearchBox from '../search-box'
 
-type TOption = { id: string; title: string }
+type TOption = { id: string; title: string; image?: string }
 
-interface Props extends TDropDownProps {
-  value?: string | null
+interface Props {
+  name: string
+  label?: string
+  options: TOption[]
+  value?: string | string[] | null
+  required?: boolean
+  error?: string
+  readOnly?: boolean
+  multiple?: boolean
+  className?: string
+  classNameIcon?: string
+  icon?: React.ReactNode
+  onChange?: (e: { target: { name: string; value: string | string[] } }) => void
 }
 
 const DropDown = ({
@@ -20,6 +33,7 @@ const DropDown = ({
   required = false,
   error,
   readOnly = false,
+  multiple = false,
   className,
   classNameIcon,
   icon,
@@ -27,6 +41,11 @@ const DropDown = ({
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)
+
+  // برای حالت multiple
+  const [selected, setSelected] = useState<string[]>(
+    Array.isArray(value) ? value : []
+  )
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -43,89 +62,180 @@ const DropDown = ({
     }
   }, [])
 
-  const selectedOption = options.find((opt) => opt.id === value)
+  // ---------------------- حالت تک انتخابی ----------------------
+  if (!multiple) {
+    const selectedOption = options.find((opt) => opt.id === value)
 
-  const handleSelect = (val: string) => {
-    onChange?.({
-      target: {
-        name,
-        value: val,
-      },
-    })
-    setIsOpen(false)
-  }
+    const handleSelect = (val: string) => {
+      onChange?.({
+        target: {
+          name,
+          value: val,
+        },
+      })
+      setIsOpen(false)
+    }
 
-  return (
-    <div
-      ref={wrapperRef}
-      className={twMerge('w-full relative my-3', className)}
-    >
+    return (
       <div
-        className={twMerge(
-          'flex items-center shadow-md text-base font-medium h-13 border border-transparent rounded-xl w-full cursor-pointer transition-colors p-1',
-          !readOnly ? 'bg-primary-900 ' : 'bg-primary-700 cursor-not-allowed',
-          error && 'border-red-400'
-        )}
-        onClick={() => !readOnly && setIsOpen(!isOpen)}
+        ref={wrapperRef}
+        className={twMerge('relative my-3 w-full', className)}
       >
-        <div className={twMerge('px-2 text-neutral-500', classNameIcon)}>
-          {icon}
-        </div>
-
-        <div className="grow h-fit relative text-sm ">
-          {label && (
-            <div
-              className={twMerge(
-                'absolute w-fit h-2 pb-2 select-none capitalize tracking-wide font-medium text-sm flex items-center justify-between px-1',
-                (value !== undefined && value !== null) || isOpen
-                  ? 'top-0 -translate-y-4 translate-x-2'
-                  : 'top-1/2 -translate-y-1/2 translate-x-2',
-                error && 'text-error-300'
-              )}
-            >
-              {label}
-              {required && <span className="text-red-400">*</span>}
-            </div>
+        <div
+          className={twMerge(
+            'flex h-13 w-full cursor-pointer items-center rounded-xl border border-transparent p-1 text-base font-medium shadow-md transition-colors',
+            !readOnly ? 'bg-primary-900' : 'bg-primary-700 cursor-not-allowed',
+            error && 'border-red-400'
           )}
+          onClick={() => !readOnly && setIsOpen(!isOpen)}
+        >
+          <div className={twMerge('px-2 text-neutral-500', classNameIcon)}>
+            {icon}
+          </div>
 
-          <div className="text-gray-50 text-base">
-            {selectedOption ? selectedOption.title : ''}
+          <div className="relative h-fit grow text-sm">
+            {label && (
+              <div
+                className={twMerge(
+                  'absolute flex h-2 w-fit items-center justify-between px-1 pb-2 text-sm font-medium tracking-wide capitalize select-none',
+                  (value !== undefined && value !== null) || isOpen
+                    ? 'top-0 translate-x-2 -translate-y-4'
+                    : 'top-1/2 translate-x-2 -translate-y-1/2',
+                  error && 'text-error-300'
+                )}
+              >
+                {label}
+                {required && <span className="text-red-400">*</span>}
+              </div>
+            )}
+
+            <div className="text-base text-gray-50">
+              {selectedOption ? selectedOption.title : ''}
+            </div>
+          </div>
+
+          <div className="px-2 text-gray-50">
+            <IoIosArrowDown
+              className={`transition-transform ease-in ${
+                isOpen ? 'rotate-180' : ''
+              }`}
+            />
           </div>
         </div>
 
-        <div className="px-2 text-gray-50">
-          <IoIosArrowDown
-            className={`transition-transform ease-in ${
-              isOpen ? 'rotate-180' : ''
-            }`}
-          />
-        </div>
+        {isOpen && !readOnly && (
+          <div className="bg-primary-900 absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-gray-200 shadow-lg">
+            {options.map((opt) => (
+              <div
+                key={opt.id}
+                onClick={() => handleSelect(opt.id)}
+                className={twMerge(
+                  'hover:bg-primary-800 cursor-pointer px-4 py-2 text-sm',
+                  opt.id === value && 'bg-primary-800 font-medium'
+                )}
+              >
+                {opt.title}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {!readOnly && <input type="hidden" name={name} value={value ?? ''} />}
+
+        {error && (
+          <div className="mt-1 flex items-center gap-1 pl-3 text-sm font-normal text-red-400">
+            <TiWarningOutline />
+            <span>{error}</span>
+          </div>
+        )}
       </div>
+    )
+  }
+
+  // ---------------------- حالت چند انتخابی ----------------------
+  const [searchValue, setSearchValue] = useState<string | null>(null)
+  const toggleOption = (val: string) => {
+    setSelected((prev) =>
+      prev.includes(val) ? prev.filter((item) => item !== val) : [...prev, val]
+    )
+  }
+
+  useEffect(() => {
+    onChange?.({
+      target: {
+        name,
+        value: selected,
+      },
+    })
+  }, [selected])
+
+  return (
+    <div ref={wrapperRef} className="relative my-3 w-full">
+      <button
+        type="button"
+        onClick={() => !readOnly && setIsOpen(!isOpen)}
+        className={twMerge(
+          'bg-bg-secondary flex w-full items-center justify-between rounded-md border p-2 text-sm',
+          isOpen ? 'border-accent-600' : 'border-primary-800'
+        )}
+      >
+        <span>
+          {selected.length > 0
+            ? options
+                .filter((o) => selected.includes(o.id))
+                .map((o) => o.title)
+                .join(', ')
+            : label}
+        </span>
+        <IoIosArrowDown
+          className={`h-4 w-4 text-gray-500 transition-transform ${
+            isOpen ? 'rotate-180' : ''
+          }`}
+        />
+      </button>
 
       {isOpen && !readOnly && (
-        <div className="absolute mt-1 w-full bg-primary-900 border border-gray-200 rounded-xl shadow-lg max-h-60 z-20 overflow-y-auto">
-          {options.map((opt) => (
-            <div
-              key={opt.id}
-              onClick={() => handleSelect(opt.id)}
-              className={twMerge(
-                'px-4 py-2 text-sm hover:bg-primary-800 cursor-pointer',
-                opt.id === value && 'bg-primary-800 font-medium'
-              )}
-            >
-              {opt.title}
-            </div>
-          ))}
+        <div className="bg-bg-primary absolute z-10 mt-1 flex h-[250px] w-full flex-col gap-1 overflow-auto rounded-md border p-3 shadow-lg">
+          <SearchBox
+            open
+            onChange={(e) => setSearchValue(e)}
+            value={searchValue ?? ''}
+            className="rounded-md"
+          />
+          {options
+            .filter((opt) =>
+              !searchValue
+                ? true
+                : opt.title.toLowerCase().includes(searchValue.toLowerCase())
+            )
+            .map((opt) => (
+              <label
+                key={opt.id}
+                className="hover:bg-bg-secondary flex w-full cursor-pointer items-center justify-between p-2"
+              >
+                <CustomCheckbox
+                  checked={selected.includes(opt.id)}
+                  onChange={() => toggleOption(opt.id)}
+                />
+                <div className="flex items-center gap-2 capitalize">
+                  {opt.title}
+                  {opt.image && (
+                    <Image alt="" src={opt.image} width={20} height={20} />
+                  )}
+                </div>
+              </label>
+            ))}
         </div>
       )}
 
-      {/* اینجاست: مقدار انتخاب‌شده رو داخل فرم نگه می‌داره */}
-      {!readOnly && (
-        <input type="hidden" name={name} value={value ?? ''} />
-      )}
+      {/* نگهداری مقادیر برای فرم */}
+      {!readOnly &&
+        selected.map((val) => (
+          <input key={val} type="hidden" name={name} value={val} />
+        ))}
 
       {error && (
-        <div className="text-red-400 flex gap-1 pl-3 items-center text-sm font-normal mt-1">
+        <div className="mt-1 flex items-center gap-1 pl-3 text-sm font-normal text-red-400">
           <TiWarningOutline />
           <span>{error}</span>
         </div>

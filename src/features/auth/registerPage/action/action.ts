@@ -2,20 +2,20 @@
 
 import prisma from '@/shared/utils/db'
 import bcrypt from 'bcryptjs'
-import { TRegisterResponse } from '../types/type'
+import { TRegiesterInputKeys, TRegisterResponse } from '../types/type'
 
 export async function registerUser(
   formData: FormData
 ): Promise<TRegisterResponse> {
-  const errors: Record<string, string> = {}
+  const errors: Partial<Record<TRegiesterInputKeys | 'general', string[]>> = {}
 
   const userName = formData.get('userName') as string
   const password = formData.get('password') as string
   const userPhone = formData.get('userPhone') as string
 
-  if (!userPhone) errors.userPhone = 'وارد کردن شماره همراه اجباری'
-  if (!password) errors.password = 'وارد کردن رمز اجباری'
-  if (!userName) errors.userName = 'وارد کردن نام کاربری اجباری'
+  if (!userPhone) errors.userPhone = ['وارد کردن شماره همراه اجباری']
+  if (!password) errors.password = ['وارد کردن رمز اجباری']
+  if (!userName) errors.userName = ['وارد کردن نام کاربری اجباری']
 
   if (Object.keys(errors).length > 0) {
     return { type: 'error', errors }
@@ -26,12 +26,12 @@ export async function registerUser(
     const existingUser = await prisma.user.findUnique({ where: { userPhone } })
 
     if (existingUser?.ban) {
-      errors.phone = 'این حساب کاربری مسدود شده'
+      errors.userPhone = ['این حساب کاربری مسدود شده']
       return { type: 'error', errors }
     }
 
     if (existingUser) {
-      errors.phone = 'این شماره همراه قبلا ثبت نام کرده'
+      errors.userPhone = ['این شماره همراه قبلا ثبت نام کرده']
       return { type: 'error', errors }
     }
 
@@ -52,7 +52,7 @@ export async function registerUser(
     console.error('Register error:', err)
     return {
       type: 'error',
-      errors: { general: 'خطای غیرمنتظره‌ای رخ داد. دوباره تلاش کنید.' },
+      errors: { general: ['خطای غیرمنتظره‌ای رخ داد. دوباره تلاش کنید.'] },
     }
   }
 }
