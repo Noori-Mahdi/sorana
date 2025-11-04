@@ -1,5 +1,5 @@
-import { twMerge } from "tailwind-merge";
-import { TContainerProps } from "./type";
+import { twMerge } from 'tailwind-merge'
+import { TContainerProps } from './type'
 
 const Container = ({
   children,
@@ -12,17 +12,17 @@ const Container = ({
   return (
     <div
       className={twMerge(
-        "md:p-5 p-3 py-5",
+        'p-3 py-5 md:p-5',
         className,
-        removeSpaceBottom && "pb-0",
-        removeSpaceTop && "pt-0",
-        removeSpaceRight && "pr-0",
-        removeSpaceLeft && "pl-0"
+        removeSpaceBottom && 'pb-0 md:pb-0',
+        removeSpaceTop && 'pt-0 md:pt-0',
+        removeSpaceRight && 'pr-0 md:pr-0',
+        removeSpaceLeft && 'pl-0 md:pl-0'
       )}
     >
       {children}
     </div>
-  );
-};
+  )
+}
 
-export default Container;
+export default Container

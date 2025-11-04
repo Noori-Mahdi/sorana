@@ -21,14 +21,6 @@ enum Role {
   user
 }
 
-enum ProductType {
-  frontRotor
-  frontBrake
-  rearRotor
-  rearBrake
-  parkingShoe
-}
-
 enum UserStatus {
   online
   offline
@@ -95,15 +87,54 @@ model Company {
 }
 
 model Product {
-  id                String      @id @default(uuid())
-  name              String      @unique
-  type              ProductType
-  length            String?
-  width             String?
-  mainTechnicalCode String?
-  FMSITechnicalCode String?
-  HIQTechnicalCode  String?
-  WVATechnicalCode  String?
-  image             String
-  cars              Car[]       @relation("CarBrakes")
+  id          String       @id @default(uuid())
+  name        String       @unique
+  ProductType EProductType
+  image       String
+
+  // Disc Detail
+  DicsType          EDicsType?
+  DiscThicknessMax  Float?
+  DiscThicknessMin  Float?
+  NumOfHoles        Float?
+  CenteringDiameter Float?
+  PitchCircle       Float?
+  Outter            Float?
+  Drum              Float?
+  Height            Float?
+  StructureMaterial String?
+
+  // Brake Pads
+  length      Float?
+  width       Float?
+  Thickness   Float?
+  PcsInSet    Float?
+  BrakeSystem String?
+
+  // BRAKE SHOE 
+  Radius Float?
+
+  mainTechnicalCode String[] @default([])
+  FMSITechnicalCode String[] @default([])
+  HIQTechnicalCode  String[] @default([])
+  WVATechnicalCode  String[] @default([])
+
+  cars Car[] @relation("CarBrakes")
+}
+
+enum EProductType {
+  frontRotor
+  frontBrake
+  rearRotor
+  rearBrake
+  parkingShoe
+}
+
+enum EDicsType {
+  Solid
+  Vented
+  Drilled
+  Slotted
+  Floating
+  Carbon
 }

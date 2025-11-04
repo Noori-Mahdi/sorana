@@ -1,4 +1,4 @@
-import RegisterPage from '@/features/auth/registerPage/page'
+import RegisterPage from '@/features/auth/pages/registerPage/page'
 
 const Register = () => {
   return <RegisterPage />

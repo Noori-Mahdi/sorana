@@ -57,17 +57,17 @@ const Modal = ({
   return (
     <div
       className={twMerge(
-        'fixed inset-0 z-50 w-full flex  justify-center items-center',
+        'fixed inset-0 z-50 flex w-full items-center justify-center ',
         isDrawer ? 'items-end' : '',
         modalClassName
       )}
     >
-      <div className="absolute inset-0 backdrop-blur-xs bg-stone-50/10"></div>
+      <div className="absolute inset-0 bg-stone-50/10 backdrop-blur-xs"></div>
       <div
         className={twMerge(
-          `p-5 overflow-y-auto rounded shadow-lg max-h-screen  bg-bg-secondary border border-accent-400 relative drawer is-open`,
+          `bg-bg-secondary border-accent-400 drawer my-3 is-open relative max-h-11/12 overflow-y-auto rounded border p-5 shadow-lg`,
           isDrawer ? '!w-full' : '',
-          size ? size : 'w-96',
+          size ? size : ' w-full md:w-7/12',
           classNameBox
         )}
         ref={modalRef}
@@ -75,11 +75,11 @@ const Modal = ({
         {type !== 'map' && (
           <div
             className={twMerge(
-              'flex justify-end items-start md:text-lg mb-5 text-sm',
+              'mb-5 flex items-start justify-end text-sm md:text-lg',
               (type != null || label) && 'justify-between'
             )}
           >
-            <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-2">
               {type === 'warning' ? (
                 <IoWarningOutline className="text-yellow-500" />
               ) : type === 'info' ? (
@@ -88,18 +88,18 @@ const Modal = ({
                 <MdOutlineReportGmailerrorred className="text-error-300" />
               ) : null}
               {label ? (
-                <span className="capitalize tracking-wide font-semibold">
+                <span className="font-semibold tracking-wide capitalize">
                   {label}
                 </span>
               ) : (
-                <span className="capitalize tracking-wide font-semibold">
+                <span className="font-semibold tracking-wide capitalize">
                   {type}
                 </span>
               )}
             </div>
             {!force && (
               <IoIosClose
-                className=" cursor-pointer text-2xl hover:text-accent-400 text-gray-300"
+                className="hover:text-accent-400 cursor-pointer text-2xl text-gray-300"
                 onClick={closeModalHandler}
               />
             )}

@@ -1,4 +1,4 @@
-import SoldManagementPage from '@/features/admin-panel/components/soldManagement'
+import SoldManagementPage from "@/features/admin-panel/pages/SoldManagementPage"
 
 const soldManagement = () => {
   return <SoldManagementPage />

@@ -10,14 +10,18 @@ type TSearchBoxProps = {
   open?: boolean
   value: string
   className?: string
+  classNameParent?: string
+  placeholder?:string
   onChange: (e: string) => void
 }
 
 const SearchBox = ({
   value,
   onChange,
+  placeholder,
   open = false,
   className,
+  classNameParent
 }: TSearchBoxProps) => {
   const [isOpen, setIsOpen] = useState(false)
   if (!isOpen && !open) {
@@ -35,8 +39,10 @@ const SearchBox = ({
       name="search"
       type="text"
       classNameInput={twMerge('h-10', className)}
+      classNameBox={classNameParent}
       value={value}
       onChange={(e) => onChange?.(e.target.value)}
+      placeholder={placeholder}
       secondaryIcon={
         !open && (
           <IoMdClose

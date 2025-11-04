@@ -9,11 +9,16 @@ export default function Layout({
   children: React.ReactNode
 }>) {
   return (
-    <Container className="flex flex-col h-screen overflow-y-s">
+    <Container
+      className="flex h-full flex-col"
+      removeSpaceBottom
+      removeSpaceLeft
+      removeSpaceRight
+      removeSpaceTop
+    >
       <Header />
-      <div className="flex-1 pt-2">{children}</div>
-      <MobileNav className={'md:hidden flex'} />
-      <Footer className="hidden md:block" />
+      <div className="h-full flex-1">{children}</div>
+      <MobileNav className={'flex md:hidden'} />
     </Container>
   )
 }

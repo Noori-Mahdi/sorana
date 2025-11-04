@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { FaArrowLeft, FaArrowRight, FaLongArrowAltRight } from 'react-icons/fa'
 import { twMerge } from 'tailwind-merge'
 
 type TSideDrawerProps = {
@@ -19,7 +20,7 @@ const SideDrawer = ({ list }: TSideDrawerProps) => {
       {/* mobile desin */}
       <ul
         className={twMerge(
-          'md:hidden bg-bg-primary border border-primary-700 flex  gap-2 py-3 justify-around items-start text-gray-50 px-2 z-20 rounded-md '
+          'bg-bg-primary border-primary-700 z-20 flex items-start justify-around gap-2 rounded-md border px-2 py-3 text-gray-50 shadow-md md:hidden'
         )}
       >
         {list.map((e, index) => (
@@ -30,8 +31,8 @@ const SideDrawer = ({ list }: TSideDrawerProps) => {
               }}
               href={e.name}
               className={twMerge(
-                'relative flex gap-2 text-xs cursor-pointer p-1 last:border-none hover:text-accent-400 transition-colors duration-200',
-                p === '/' + e.name && ' text-accent-400  border-0'
+                'hover:text-accent-400 relative flex cursor-pointer gap-2 p-1 text-xs transition-colors duration-200 last:border-none',
+                p === '/' + e.name && 'text-accent-400 border-0'
               )}
             >
               {e.icon}
@@ -43,27 +44,39 @@ const SideDrawer = ({ list }: TSideDrawerProps) => {
 
       <ul
         className={twMerge(
-          ' bg-bg-primary border w-fit hidden mt-2 border-primary-700 md:flex flex-col justify-start items-start text-gray-50  z-20 rounded-md '
+          'bg-bg-primary border-primary-900 hidden flex-col items-end justify-start border-l-2 text-gray-50 md:flex'
         )}
       >
         {list.map((e, index) => (
           <li className="" key={e.name}>
             <Link
-              onClick={() => {
-                setOpenSideBar(false)
-              }}
               href={e.name}
               className={twMerge(
-                'relative flex gap-2 px-2 py-3 min-w-[200px] text-xs cursor-pointer  last:border-none hover:text-accent-400 transition-colors duration-200',
-                p === '/' + e.name &&
-                  'bg-bg-secondary text-accent-400  border-0'
+                'hover:text-accent-400 relative mx-2 my-0.5 flex cursor-pointer justify-between gap-2 rounded-md px-2 py-3 text-white transition-colors duration-200 last:border-none',
+                openSideBar ? 'min-w-[200px] text-sm' : 'w-fit text-xl',
+                p === '/' + e.name && 'bg-bg-secondary text-accent-400 border-0'
               )}
             >
-              {e.icon}
-              <span> {e.label}</span>
+              {openSideBar && <span className="font-normal"> {e.label}</span>}
+              <span className={twMerge(openSideBar ? 'text-base' : 'text-lg')}>
+                {e.icon}
+              </span>
             </Link>
           </li>
         ))}
+        <li className="px-2 py-3 text-sm">
+          {openSideBar ? (
+            <FaArrowRight
+              className="hover:text-primary-400 mx-2 cursor-pointer"
+              onClick={() => setOpenSideBar(!openSideBar)}
+            />
+          ) : (
+            <FaArrowLeft
+              className="hover:text-primary-400 mx-2 cursor-pointer"
+              onClick={() => setOpenSideBar(!openSideBar)}
+            />
+          )}
+        </li>
       </ul>
     </>
   )

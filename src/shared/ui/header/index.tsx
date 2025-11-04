@@ -5,19 +5,29 @@ import LoginButton from '../loginButton'
 import { verifyUser } from '@/shared/action/action'
 import Link from 'next/link'
 import ReturnButton from '../ReturnButton'
+import ImageBox from '../../components/ImageBox'
 
 const Header = async () => {
   const hasUser = await verifyUser()
 
   return (
-    <div className="bg-bg-secondary sticky top-0 z-10 flex items-center justify-between gap-3 pb-4">
-      <div className="hidden flex-1 items-center justify-start gap-3 md:flex">
+    <Container className="bg-bg-primary border-primary-900 flex justify-between border-b-2 shadow-lg md:py-3">
+      <div className="hidden flex-1 items-center justify-start gap-6 md:flex">
         <LoginButton hasUser={hasUser} />
         <NavBar />
       </div>
       <ReturnButton className={'flex md:hidden'} />
-      <Logo height={35} width={35} />
-    </div>
+      <ImageBox
+        imageAlt="logo"
+        imageURL="/logo/logo.png"
+        imageWeight={40}
+        imageHidth={40}
+        imageClassName="order-2"
+        parentClassName="flex items-center justify-center gap-1"
+        labelClassName="order-1 font-semibold md:text-xl "
+        labelContent="SOREN"
+      />
+    </Container>
   )
 }
 

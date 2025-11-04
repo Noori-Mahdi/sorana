@@ -13,7 +13,7 @@ type TOption = { id: string; title: string; image?: string }
 interface Props {
   name: string
   label?: string
-  options: TOption[]
+  options: TOption[] | null
   value?: string | string[] | null
   required?: boolean
   error?: string
@@ -21,6 +21,8 @@ interface Props {
   multiple?: boolean
   className?: string
   classNameIcon?: string
+  empty?: boolean
+  loading?: boolean
   icon?: React.ReactNode
   onChange?: (e: { target: { name: string; value: string | string[] } }) => void
 }
@@ -37,6 +39,8 @@ const DropDown = ({
   className,
   classNameIcon,
   icon,
+  loading,
+  empty,
   onChange,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -64,7 +68,7 @@ const DropDown = ({
 
   // ---------------------- حالت تک انتخابی ----------------------
   if (!multiple) {
-    const selectedOption = options.find((opt) => opt.id === value)
+    const selectedOption = options?.find((opt) => opt.id === value) || null
 
     const handleSelect = (val: string) => {
       onChange?.({
@@ -83,7 +87,7 @@ const DropDown = ({
       >
         <div
           className={twMerge(
-            'flex h-13 w-full cursor-pointer items-center rounded-xl border border-transparent p-1 text-base font-medium shadow-md transition-colors',
+            'border-primary-700 flex h-14 w-full cursor-pointer items-center border-2 rounded-md  p-1 text-base font-medium shadow-md transition-colors',
             !readOnly ? 'bg-primary-900' : 'bg-primary-700 cursor-not-allowed',
             error && 'border-red-400'
           )}
@@ -97,9 +101,9 @@ const DropDown = ({
             {label && (
               <div
                 className={twMerge(
-                  'absolute flex h-2 w-fit items-center justify-between px-1 pb-2 text-sm font-medium tracking-wide capitalize select-none',
+                  'absolute flex h-2 w-fit items-center justify-between px-1 pb-2 text-sm font-medium tracking-wide capitalize transition-all duration-300 ease-in-out select-none',
                   (value !== undefined && value !== null) || isOpen
-                    ? 'top-0 translate-x-2 -translate-y-4'
+                    ? 'top-0 translate-x-2 -translate-y-10'
                     : 'top-1/2 translate-x-2 -translate-y-1/2',
                   error && 'text-error-300'
                 )}
@@ -125,18 +129,27 @@ const DropDown = ({
 
         {isOpen && !readOnly && (
           <div className="bg-primary-900 absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-gray-200 shadow-lg">
-            {options.map((opt) => (
-              <div
-                key={opt.id}
-                onClick={() => handleSelect(opt.id)}
-                className={twMerge(
-                  'hover:bg-primary-800 cursor-pointer px-4 py-2 text-sm',
-                  opt.id === value && 'bg-primary-800 font-medium'
-                )}
-              >
-                {opt.title}
-              </div>
-            ))}
+            {
+              options ? (
+                options.map((opt) => (
+                  <div
+                    key={opt.id}
+                    onClick={() => handleSelect(opt.id)}
+                    className={twMerge(
+                      'hover:bg-primary-800 cursor-pointer px-4 py-2 text-sm',
+                      opt.id === value && 'bg-primary-800 font-medium'
+                    )}
+                  >
+                    {opt.title}
+                  </div>
+                ))
+              ) : empty ? (
+                <div>هیچ موردی یافت نشد</div>
+              ) : (
+                <></>
+              )
+              //Loading
+            }
           </div>
         )}
 
@@ -179,8 +192,11 @@ const DropDown = ({
           isOpen ? 'border-accent-600' : 'border-primary-800'
         )}
       >
+        {selected.length > 0 && (
+          <span className="absolute -top-6">{label}</span>
+        )}
         <span>
-          {selected.length > 0
+          {selected.length > 0 && options
             ? options
                 .filter((o) => selected.includes(o.id))
                 .map((o) => o.title)
@@ -196,35 +212,45 @@ const DropDown = ({
 
       {isOpen && !readOnly && (
         <div className="bg-bg-primary absolute z-10 mt-1 flex h-[250px] w-full flex-col gap-1 overflow-auto rounded-md border p-3 shadow-lg">
-          <SearchBox
-            open
-            onChange={(e) => setSearchValue(e)}
-            value={searchValue ?? ''}
-            className="rounded-md"
-          />
-          {options
-            .filter((opt) =>
-              !searchValue
-                ? true
-                : opt.title.toLowerCase().includes(searchValue.toLowerCase())
-            )
-            .map((opt) => (
-              <label
-                key={opt.id}
-                className="hover:bg-bg-secondary flex w-full cursor-pointer items-center justify-between p-2"
-              >
-                <CustomCheckbox
-                  checked={selected.includes(opt.id)}
-                  onChange={() => toggleOption(opt.id)}
-                />
-                <div className="flex items-center gap-2 capitalize">
-                  {opt.title}
-                  {opt.image && (
-                    <Image alt="" src={opt.image} width={20} height={20} />
-                  )}
-                </div>
-              </label>
-            ))}
+          <div className="flex items-center justify-center gap-2">
+            <SearchBox
+              open
+              placeholder="جستجو ..."
+              onChange={(e) => setSearchValue(e)}
+              value={searchValue ?? ''}
+              className="rounded-md"
+              classNameParent="w-5/6"
+            />
+          </div>
+          {options ? (
+            options
+              .filter((opt) =>
+                !searchValue
+                  ? true
+                  : opt.title.toLowerCase().includes(searchValue.toLowerCase())
+              )
+              .map((opt) => (
+                <label
+                  key={opt.id}
+                  className="hover:bg-bg-secondary flex w-full cursor-pointer items-center justify-between p-2"
+                >
+                  <CustomCheckbox
+                    checked={selected.includes(opt.id)}
+                    onChange={() => toggleOption(opt.id)}
+                  />
+                  <div className="flex items-center gap-2 capitalize">
+                    {opt.title}
+                    {opt.image && (
+                      <Image alt="" src={opt.image} width={20} height={20} />
+                    )}
+                  </div>
+                </label>
+              ))
+          ) : empty ? (
+            <div>هیچ موردی یافت نشد</div>
+          ) : (
+            <></>
+          )}
         </div>
       )}
 

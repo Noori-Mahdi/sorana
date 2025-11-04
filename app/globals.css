@@ -322,3 +322,36 @@ html {
   );
 }
 
+
+/* 🎯 استایل عمومی برای اسکرول */
+::-webkit-scrollbar {
+  width: 6px; /* 🔹 عرض اسکرول‌بار (لاغرش کن) */
+  height: 6px; /* برای اسکرول افقی */
+}
+
+/* مسیر اسکرول */
+::-webkit-scrollbar-track {
+  background: transparent; /* می‌تونی رنگ بک‌گراند بذاری */
+}
+
+/* خود بخش متحرک اسکرول */
+::-webkit-scrollbar-thumb {
+  background-color: #555; /* رنگ خاکستری تیره */
+  border-radius: 4px;
+}
+
+/* hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #777;
+}
+
+/* حذف فلش‌های بالا و پایین */
+::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* برای فایرفاکس */
+* {
+  scrollbar-width: thin; /* 🔹 لاغر کردن */
+  scrollbar-color: #555 transparent; /* thumb + track */
+}

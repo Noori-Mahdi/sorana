@@ -1,4 +1,4 @@
-import UserMangementPage from "@/features/admin-panel/components/user/userMangement"
+import UserMangementPage from '@/features/admin-panel/pages/userMangement'
 
 const UserManagement = () => {
   return <UserMangementPage />

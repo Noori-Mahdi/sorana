@@ -1,7 +1,7 @@
-import ProductManagementPage from "@/features/admin-panel/components/product/productManagement";
+import ProductManagementPage from '@/features/admin-panel/pages/productManagement'
 
 const ProductManagement = () => {
-    return ( <ProductManagementPage/> );
+  return <ProductManagementPage />
 }
- 
-export default ProductManagement;
+
+export default ProductManagement

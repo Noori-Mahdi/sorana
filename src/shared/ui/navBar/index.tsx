@@ -20,7 +20,7 @@ const NavBar = ({ className }: TNavBarProps) => {
     { href: '/', label: 'خانه', subHref: ['/'] },
     { href: '/store', label: 'فروشگاه', subHref: ['/store'] },
     { href: '/application', label: 'اپلیکیشن', subHref: ['/application'] },
-    { href: '/aboutUs', label: 'درباره ما', subHref: ['/aboutUs'] },
+    // { href: '/aboutUs', label: 'درباره ما', subHref: ['/aboutUs'] },
     {
       href: '/adminPanel',
       label: 'پنل ادمین',
@@ -43,15 +43,15 @@ const NavBar = ({ className }: TNavBarProps) => {
 
   return (
     <nav className="relative">
-      <ul className={twMerge(`hidden md:flex gap-4 text-sm`, className)}>
+      <ul className={twMerge(`hidden md:flex gap-6 text-sm`, className)}>
         {links.map(({ href, label, subHref }) => (
           <li key={href}>
             <Link
               href={href}
-              className={`cursor-pointer border-b-2 p-1 text-gary-50 border-transparent ${
+              className={`cursor-pointer border-b-2 p-1 font-semibold text-gary-50 border-transparent ${
                 isLinkActive(subHref, pathname)
-                  ? 'border-accent-400 font-bold'
-                  : ' hover:border-accent-500'
+                  ? 'text-primary-50 font-bold'
+                  : ' text-primary-300'
               }`}
             >
               {label}

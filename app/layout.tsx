@@ -8,7 +8,7 @@ export default function RootLayout({
 }>) {
   return (
     <html dir="rtl" lang="fa">
-      <body className="bg-bg-secondary min-h-screen text-gray-50">
+      <body className="bg-bg-secondary h-screen overflow-hidden text-gray-50">
         <ContextProviders>{children}</ContextProviders>
       </body>
     </html>

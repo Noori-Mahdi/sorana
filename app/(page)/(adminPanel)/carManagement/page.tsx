@@ -1,7 +1,7 @@
-import CarManagementPage from "@/features/admin-panel/components/car/carManagementPage";
+import CarManagementPage from '@/features/admin-panel/pages/carManagementPage'
 
 const CarManagement = () => {
-    return ( <CarManagementPage/> );
+  return <CarManagementPage />
 }
- 
-export default CarManagement;
+
+export default CarManagement
