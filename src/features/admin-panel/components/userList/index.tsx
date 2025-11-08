@@ -7,7 +7,7 @@ type TUserListProps = {
 
 const UserList = ({ list }: TUserListProps) => {
   return (
-    <ul>
+    <ul className='m-4 flex flex-col gap-2 overflow-auto'>
       {list.map((itme) => (
         <li key={itme.id}>
           <UserCard info={itme} />

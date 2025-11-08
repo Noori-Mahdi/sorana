@@ -13,28 +13,27 @@ const Footer = ({ className }: TFooterProps) => {
     { href: '/', label: 'خانه' },
     { href: '/store', label: 'فروشگاه' },
     { href: '/application', label: 'اپلیکیشن' },
-    { href: '/aboutUs', label: 'درباره ما' },
-    { href: '/adminPanel', label: 'پنل ادمین' },
+    { href: '/carManagement', label: 'پنل ادمین' },
   ]
 
   return (
     <footer className={className}>
-      <Container className={`bg-gray-950 text-gray-50 `}>
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+      <Container className={`bg-gray-950 text-gray-50`}>
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 md:flex-row">
           <div className="text-lg font-bold">اسم برند</div>
-          <ul className="flex flex-wrap text-center justify-center items-center text-xs gap-4">
+          <ul className="flex flex-wrap items-center justify-center gap-4 text-center text-xs">
             {links.map(({ href, label }) => (
               <li key={href}>
                 <Link
                   href={href}
-                  className="cursor-pointer hover:text-primary-400 transition"
+                  className="hover:text-primary-400 cursor-pointer transition"
                 >
                   {label}
                 </Link>
               </li>
             ))}
           </ul>
-          <div className="flex flex-col items-center md:items-end gap-2 text-xs">
+          <div className="flex flex-col items-center gap-2 text-xs md:items-end">
             <div className="flex items-center gap-2">
               <MdPhone /> <a href="tel:+989000000000">+98 900 000 0000</a>
             </div>

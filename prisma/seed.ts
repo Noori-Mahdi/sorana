@@ -1,40 +1,49 @@
-import { PrismaClient } from '../src/generated/prisma'; // مسیر خروجی client طبق schema‌ تو
+import { PrismaClient } from '../src/generated/prisma'; // مسیر صحیح client
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 شروع seeding برای Comment و Sold ...');
+  console.log('🌱 شروع seeding برای Sold ...');
 
   // کاربران موجود را می‌گیریم
   const users = await prisma.user.findMany();
-
   if (users.length === 0) {
     console.log('❌ هیچ کاربری در دیتابیس نیست! لطفاً اول کاربر بساز.');
     return;
   }
 
-  // ----------- 1. کامنت‌ها -----------
-  const commentsData = Array.from({ length: 10 }).map((_, i) => ({
-    title: `نظر شماره ${i + 1}`,
-    content: `این یک متن تستی برای نظر شماره ${i + 1} است.`,
-    rate: (i % 5) + 1,
-    userId: users[i % users.length].id, // نسبت دادن به کاربر تصادفی
-  }));
+  // آیدی محصولات داده‌شده
+  const productIds = [
+    'eced7ca8-a495-427c-b259-e0e4e7228393',
+    'ebba3aa2-0a3a-485a-a6f4-0c91043945e4',
+    'e7cc469c-ca14-4760-b1dc-0f1ed63792b8',
+    'e23d1416-6004-43e3-bfd2-8fdb1724d95c',
+    'a55cf22d-5261-43d5-8111-88ab678d8ad0',
+    '9e11cab0-94bd-435f-8d82-d0fe7eadce0c',
+    '1889da75-0e23-402e-b9ed-949c8b66934d',
+    '484487ee-feaa-4c6b-9e9e-b233b06ef541',
+  ];
 
-  await prisma.comment.createMany({ data: commentsData });
-  console.log('✅ 10 کامنت ساخته شد.');
+  // بررسی اینکه آیا محصولات وجود دارند
+  const existingProducts = await prisma.product.findMany({
+    where: { id: { in: productIds } },
+  });
 
-  // ----------- 2. خریدها -----------
-  const soldData = Array.from({ length: 10 }).map((_, i) => ({
-    productName: `محصول شماره ${i + 1}`,
-    quantity: (i % 3) + 1,
-    price: 100000 + i * 5000,
-    userId: users[i % users.length].id,
+  if (existingProducts.length !== productIds.length) {
+    console.log('⚠️ برخی از آیدی‌های محصولات در دیتابیس وجود ندارند.');
+  }
+
+  // ساخت داده‌های فروش
+  const soldData = productIds.map((productId, i) => ({
+    productId,
+    quantity: Math.floor(Math.random() * 3) + 1, // عدد 1 تا 3
+    price: 100000 + i * 25000, // قیمت پایه + افزایشی
+    userId: users[i % users.length].id, // هر فروش متعلق به یک کاربر
   }));
 
   await prisma.sold.createMany({ data: soldData });
-  console.log('✅ 10 خرید ساخته شد.');
+  console.log(`✅ ${soldData.length} رکورد فروش ساخته شد.`);
 
-  console.log('🌿 Seed با موفقیت انجام شد.');
+  console.log('🌿 Seed فروش با موفقیت انجام شد.');
 }
 
 main()
@@ -42,7 +51,7 @@ main()
     await prisma.$disconnect();
   })
   .catch(async (e) => {
-    console.error(e);
+    console.error('❌ خطا در seeding فروش:', e);
     await prisma.$disconnect();
     process.exit(1);
   });

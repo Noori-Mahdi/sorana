@@ -16,27 +16,27 @@ const MobileNav = ({ className }: TMobileNavProps) => {
 
   const items = [
     {
-      icon: <IoHome className=" w-6 h-6" />,
+      icon: <IoHome className="h-6 w-6" />,
       label: 'خانه',
       href: '/',
       subHref: [''],
     },
     {
-      icon: <FaShoppingBasket className=" w-6 h-6" />,
+      icon: <FaShoppingBasket className="h-6 w-6" />,
       label: 'سبد',
       href: '/store',
       subHref: ['/store'],
     },
     {
-      icon: <AiOutlineProduct className=" w-6 h-6" />,
+      icon: <AiOutlineProduct className="h-6 w-6" />,
       label: 'اپلیکشین',
       href: '/application',
       subHref: ['/application'],
     },
     {
-      icon: <IoPerson className=" w-6 h-6" />,
+      icon: <IoPerson className="h-6 w-6" />,
       label: 'پروفایل',
-      href: '/userManagement',
+      href: '/carManagement',
       subHref: [
         '/userManagement',
         '/carManagement',
@@ -49,11 +49,11 @@ const MobileNav = ({ className }: TMobileNavProps) => {
   return (
     <nav
       className={twMerge(
-        'fixed bottom-1 left-1 shadow shadow-primary-900 right-1 z-20 rounded-full bg-bg-primary/90 py-2 backdrop-blur-md px-2 xs:px-4',
+        'shadow-primary-900 bg-bg-primary/90 xs:px-4 fixed right-1 bottom-1 left-1 z-20 rounded-full px-2 py-2 shadow backdrop-blur-md',
         className
       )}
     >
-      <ul className="flex justify-center gap-2 xs:gap-3 items-center  w-full">
+      <ul className="xs:gap-3 flex w-full items-center justify-center gap-2">
         {items.map(({ icon, label, href, subHref }) => {
           const active = subHref?.includes(pathname)
           return (
@@ -61,7 +61,7 @@ const MobileNav = ({ className }: TMobileNavProps) => {
               key={label}
               onClick={() => router.push(href)}
               className={twMerge(
-                'flex flex-col items-center xs:gap-1 p-1 xs:p-2 text-gray-300 cursor-pointer rounded-full  transition-all duration-300',
+                'xs:gap-1 xs:p-2 flex cursor-pointer flex-col items-center rounded-full p-1 text-gray-300 transition-all duration-300',
                 active && 'text-accent-400'
               )}
             >
