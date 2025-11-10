@@ -19,55 +19,58 @@ export type TModleCarAndCompany = {
   }
 }
 
+export type testComapny = { id: string; series: string }
+
 export type TGetProductResponse =
-  | {
-      type: 'success'
-      message?: string
-      data: TModleCarAndCompany[]
-    }
-  | {
-      type: 'error'
-      errors: { general: string }
-    }
+  | { type: 'success'; data: TModleCarAndCompany[] }
+  | { type: 'success'; data: testComapny[] }
+  | { type: 'error'; errors: { general: string } }
 
-export async function getCar(id?: string): Promise<TGetProductResponse> {
+export async function getCar(companyId?: string): Promise<TGetProductResponse> {
   try {
-    let cars
+    const whereCondition = companyId ? { companyId } : {}
 
-    if (id) {
-      // گرفتن فقط یک ماشین با id مشخص
-      const car = await prisma.car.findUnique({
-        where: { id },
-        include: {
-          company: { select: { name: true, image: true } },
-        },
-      })
-
-      cars = car ? [car] : [] // اگر پیدا نشد آرایه خالی برگرده
-    } else {
-      // گرفتن 10 ماشین اول
-      cars = await prisma.car.findMany({
-        take: 10,
-        include: {
-          company: { select: { name: true, image: true } },
-        },
-      })
-    }
-
-    const formattedCars: TModleCarAndCompany[] = cars.map((car) => ({
-      id: car.id,
-      image: car.company.image,
-      imageCar: car.imageCar,
-      carInfo: {
-        company: car.company.name,
-        series: car.series,
-        fromYear: car.fromYear,
-        toYear: car.toYear,
-        body: car.body,
+    const cars = await prisma.car.findMany({
+      where: whereCondition,
+      take: 10,
+      include: {
+        company: { select: { name: true, image: true } },
       },
-    }))
+    })
 
-    return { type: 'success', data: formattedCars }
+    let formattedCars: TModleCarAndCompany[] | { id: string; series: string }[]
+
+    if (companyId) {
+      // برگشت آرایه ساده {id, series}[]
+      formattedCars = cars.map((car) => ({
+        id: car.id,
+        series: car.series,
+      }))
+
+      return { type: 'success', data: formattedCars } as {
+        type: 'success'
+        data: { id: string; series: string }[]
+      }
+    } else {
+      // برگشت آرایه TModleCarAndCompany[]
+      formattedCars = cars.map((car) => ({
+        id: car.id,
+        image: car.company?.image ?? '',
+        imageCar: car.imageCar ?? '',
+        carInfo: {
+          company: car.company?.name ?? '',
+          series: car.series,
+          fromYear: car.fromYear,
+          toYear: car.toYear,
+          body: car.body,
+        },
+      }))
+
+      return { type: 'success', data: formattedCars } as {
+        type: 'success'
+        data: TModleCarAndCompany[]
+      }
+    }
   } catch (err) {
     console.error(err)
     return { type: 'error', errors: { general: 'خطا در دریافت ماشین‌ها' } }

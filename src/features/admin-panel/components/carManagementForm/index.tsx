@@ -1,6 +1,9 @@
 'use client'
 import { createCar } from '@/features/admin-panel/action/carAction'
-import { getCompany } from '@/features/admin-panel/action/companyAction'
+import {
+  getCompany,
+  TModelComapny,
+} from '@/features/admin-panel/action/companyAction'
 import Button from '@/shared/components/button'
 import DropDown from '@/shared/components/DropDown'
 import ImageUploader from '@/shared/components/ImageUploader'
@@ -43,15 +46,13 @@ const CarManagementForm = () => {
   }
   const [formValue, setFormValue] = useState<TCarMangementFormValues>(initial)
   const [loading, setLoading] = useState(false)
-  const [listCompany, setListCompany] = useState<
-    { name: string; id: string }[]
-  >([])
+  const [listCompany, setListCompany] = useState<TModelComapny[]>([])
 
   const getCompanyAsync = async () => {
     setLoading(true)
     try {
       const res = await getCompany()
-      if (res.type === 'success') {
+      if (res.type === 'success' && res.data) {
         setListCompany(res.data)
       }
     } catch (error) {
@@ -207,7 +208,12 @@ const CarManagementForm = () => {
           }
           className="w-full p-1 md:w-1/2"
         />
-        <ImageUploader onChange={handleChange} name="image" label="عکس ماشین" classNamePreview={'w-96'}/>
+        <ImageUploader
+          onChange={handleChange}
+          name="image"
+          label="عکس ماشین"
+          classNamePreview={'w-96'}
+        />
       </div>
       <div className="flex w-full justify-end gap-4">
         <Button

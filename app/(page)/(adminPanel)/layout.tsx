@@ -34,9 +34,7 @@ export default function Layout({
           },
         ]}
       />
-      <div className="flex flex-1 flex-col">
-        {children}
-      </div>
+      <div className="flex h-full flex-1 flex-col">{children}</div>
     </div>
   )
 }

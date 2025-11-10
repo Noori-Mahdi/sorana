@@ -44,8 +44,8 @@ const NavBar = ({ className }: TNavBarProps) => {
   return (
     <nav className="relative">
       <ul className={twMerge(`hidden gap-6 text-sm md:flex`, className)}>
-        {links.map(({ href, label, subHref }) => (
-          <li key={href}>
+        {links.map(({ href, label, subHref }, index) => (
+          <li key={index}>
             <Link
               href={href}
               className={`text-gary-50 cursor-pointer border-b-2 border-transparent p-1 font-semibold ${

@@ -1,17 +1,21 @@
 'use client'
 import { TUser } from '@/features/admin-panel/action/userAction'
+import Button from '@/shared/components/button'
 import Image from 'next/image'
 import { useState } from 'react'
 import { CiWarning } from 'react-icons/ci'
+import { ImBlocked } from 'react-icons/im'
 import { IoIosArrowDown } from 'react-icons/io'
-import { IoPerson } from 'react-icons/io5'
+import { IoEye, IoPerson, IoTrash } from 'react-icons/io5'
 import { twMerge } from 'tailwind-merge'
 
 type TUserCardProps = {
   info: TUser
+  loading: boolean
+  onClick: (e: 'view' | 'delete' | 'block') => void
 }
 
-const UserCard = ({ info }: TUserCardProps) => {
+const UserCard = ({ info, loading, onClick }: TUserCardProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -89,8 +93,37 @@ const UserCard = ({ info }: TUserCardProps) => {
           </div>
           <div className="flex justify-between">
             <span className="font-medium">تاریخ عضویت:</span>
-            <span>{new Date(info.createdAt).toLocaleDateString()}</span>
+            <span>{new Date(info.createdAt).toLocaleDateString('fa-IR')}</span>
           </div>
+        </div>
+        <div className="my-3 flex items-center justify-end gap-2">
+          <Button
+            type="button"
+            buttomIcon={<IoTrash />}
+            color="danger"
+            disabled={loading}
+            onClick={() => onClick('delete')}
+            rounded="small"
+            size="small"
+          />
+          <Button
+            type="button"
+            buttomIcon={<ImBlocked />}
+            color="warning"
+            disabled={loading}
+            onClick={() => onClick('block')}
+            rounded="small"
+            size="small"
+          />
+          <Button
+            type="button"
+            buttomIcon={<IoEye />}
+            color="secandery"
+            disabled={loading}
+            onClick={() => onClick('view')}
+            rounded="small"
+            size="small"
+          />
         </div>
       </div>
     </div>

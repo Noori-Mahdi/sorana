@@ -27,9 +27,15 @@ export type TResponse<T> =
   | { type: 'error'; errors: Record<string, string> }
 
 // گرفتن همه کاربران
-export async function getUsers(): Promise<TResponse<TUser[]>> {
+export async function getUsers(page: number): Promise<TResponse<TUser[]>> {
+  console.log('page', page)
   try {
+    const take = 6
+    const skip = (page - 1) * take
     const users = await prisma.user.findMany({
+      take,
+      skip,
+      orderBy: { createdAt: 'desc' },
       select: {
         id: true,
         userName: true,
@@ -118,5 +124,32 @@ export async function updateUser(
   } catch (err) {
     console.error(err)
     return { type: 'error', errors: { general: 'خطا در ویرایش کاربر' } }
+  }
+}
+
+
+export async function deleteUserAction(id: string): Promise<TResponse<null>> {
+  try {
+    await prisma.user.delete({ where: { id } })
+    return { type: 'success', data: null }
+  } catch (err) {
+    console.error(err)
+    return { type: 'error', errors: { general: 'خطا در حذف کاربر' } }
+  }
+}
+
+export async function blockUserAction(
+  id: string,
+  ban: boolean
+): Promise<TResponse<TUser>> {
+  try {
+    const updated = await prisma.user.update({
+      where: { id },
+      data: { ban },
+    })
+    return { type: 'success', data: updated }
+  } catch (err) {
+    console.error(err)
+    return { type: 'error', errors: { general: 'خطا در تغییر وضعیت بلاک کاربر' } }
   }
 }

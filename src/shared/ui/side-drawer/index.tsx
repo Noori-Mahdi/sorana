@@ -20,7 +20,7 @@ const SideDrawer = ({ list }: TSideDrawerProps) => {
       {/* mobile desin */}
       <ul
         className={twMerge(
-          'bg-bg-primary border-primary-700 z-20 flex items-start justify-around gap-2 rounded-md border px-2 py-3 text-gray-50 shadow-md md:hidden'
+          'bg-bg-primary border-primary-700 z-20 flex flex-1 items-start justify-around gap-2 rounded-md border px-2 py-3 text-gray-50 shadow-md md:hidden'
         )}
       >
         {list.map((e, index) => (

@@ -22,6 +22,7 @@ interface Props {
   className?: string
   classNameIcon?: string
   empty?: boolean
+  disable?: boolean
   loading?: boolean
   icon?: React.ReactNode
   onChange?: (e: { target: { name: string; value: string | string[] } }) => void
@@ -40,6 +41,7 @@ const DropDown = ({
   classNameIcon,
   icon,
   loading,
+  disable = false,
   empty,
   onChange,
 }: Props) => {
@@ -87,11 +89,11 @@ const DropDown = ({
       >
         <div
           className={twMerge(
-            'border-primary-700 flex h-14 w-full cursor-pointer items-center border-2 rounded-md  p-1 text-base font-medium shadow-md transition-colors',
+            'border-primary-700 flex h-14 w-full cursor-pointer items-center rounded-md border-2 p-1 text-base font-medium shadow-md transition-colors',
             !readOnly ? 'bg-primary-900' : 'bg-primary-700 cursor-not-allowed',
             error && 'border-red-400'
           )}
-          onClick={() => !readOnly && setIsOpen(!isOpen)}
+          onClick={() => !readOnly && !disable && setIsOpen(!isOpen)}
         >
           <div className={twMerge('px-2 text-neutral-500', classNameIcon)}>
             {icon}
@@ -121,13 +123,13 @@ const DropDown = ({
           <div className="px-2 text-gray-50">
             <IoIosArrowDown
               className={`transition-transform ease-in ${
-                isOpen ? 'rotate-180' : ''
+                isOpen && !disable && !readOnly ? 'rotate-180' : ''
               }`}
             />
           </div>
         </div>
 
-        {isOpen && !readOnly && (
+        {isOpen && !disable && !readOnly && (
           <div className="bg-primary-900 absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-gray-200 shadow-lg">
             {
               options ? (
@@ -186,7 +188,7 @@ const DropDown = ({
     <div ref={wrapperRef} className="relative my-3 w-full">
       <button
         type="button"
-        onClick={() => !readOnly && setIsOpen(!isOpen)}
+        onClick={() => !readOnly && !disable && setIsOpen(!isOpen)}
         className={twMerge(
           'bg-bg-secondary flex w-full items-center justify-between rounded-md border p-2 text-sm',
           isOpen ? 'border-accent-600' : 'border-primary-800'
@@ -210,7 +212,7 @@ const DropDown = ({
         />
       </button>
 
-      {isOpen && !readOnly && (
+      {isOpen && !disable && !readOnly && (
         <div className="bg-bg-primary absolute z-10 mt-1 flex h-[250px] w-full flex-col gap-1 overflow-auto rounded-md border p-3 shadow-lg">
           <div className="flex items-center justify-center gap-2">
             <SearchBox

@@ -2,9 +2,27 @@
 import prisma from '@/shared/utils/db'
 import fs from 'fs'
 import path from 'path'
-import { TRegisterResponse } from '@/features/auth/registerPage/types/type'
 
-export async function getCompany(): Promise<TRegisterResponse> {
+export type TGetCompanyResponse =
+  | {
+      type: 'success'
+      message?: string
+      data?: TModelComapny[]
+    }
+  | {
+      type: 'error'
+      errors: Record<'general' | string, string>
+    }
+
+export type TModelComapny = {
+  id: string
+  name: string
+  image: string
+}
+
+export type TgetCompanyResponse = {}
+
+export async function getCompany(): Promise<TGetCompanyResponse> {
   try {
     const data = await prisma.company.findMany({
       select: { id: true, name: true, image: true },
@@ -20,7 +38,7 @@ export async function getCompany(): Promise<TRegisterResponse> {
 
 export async function createCompany(
   formData: FormData
-): Promise<TRegisterResponse> {
+): Promise<TGetCompanyResponse> {
   const errors: Record<string, string> = {}
   const name = formData.get('name') as string
   const file = formData.get('image') as File
