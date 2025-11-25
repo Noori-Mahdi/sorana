@@ -1,21 +1,21 @@
-import ProductList from '../../components/productList'
-import { getProduct } from '@/features/admin-panel/action/productActoin'
+// import { getProductBase } from '@/features/admin-panel/action/ProductBaseActoin'
 import FilterBox from '../../components/FilterBox'
+import ProductBaseList from '../../components/ProductBaseManagement/productBaseList'
 
 const ProductManagementPage = async () => {
-  const product = await getProduct()
-  console.log(product, 'product')
-  if (product.type === 'success') {
+  // const product = await getProductBase()
+  // console.log(product, 'product')
+  // if (product.type === 'success') {
     return (
       <>
         <FilterBox />
-        <ProductList
+        {/* <ProductBaseList
           list={product.data}
           className={'h-[calc(100vh-48px)] flex-1 overflow-y-auto'}
-        />
+        /> */}
       </>
     )
-  }
+//   }
 }
 
 export default ProductManagementPage

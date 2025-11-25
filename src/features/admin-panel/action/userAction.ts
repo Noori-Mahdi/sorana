@@ -127,7 +127,6 @@ export async function updateUser(
   }
 }
 
-
 export async function deleteUserAction(id: string): Promise<TResponse<null>> {
   try {
     await prisma.user.delete({ where: { id } })
@@ -150,6 +149,9 @@ export async function blockUserAction(
     return { type: 'success', data: updated }
   } catch (err) {
     console.error(err)
-    return { type: 'error', errors: { general: 'خطا در تغییر وضعیت بلاک کاربر' } }
+    return {
+      type: 'error',
+      errors: { general: 'خطا در تغییر وضعیت بلاک کاربر' },
+    }
   }
 }

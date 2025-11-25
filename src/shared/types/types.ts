@@ -7,3 +7,5 @@ export type TFormInputState = {
   value: string | null
   error?: string[]
 }
+
+export type TModeForm = 'create' | 'edit' | 'view' | 'delete'

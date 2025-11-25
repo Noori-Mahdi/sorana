@@ -8,9 +8,10 @@ import { twMerge } from 'tailwind-merge'
 
 type TSideDrawerProps = {
   list: { label: string; name: string; icon: React.ReactNode }[]
+  className: string
 }
 
-const SideDrawer = ({ list }: TSideDrawerProps) => {
+const SideDrawer = ({ list, className }: TSideDrawerProps) => {
   const [openSideBar, setOpenSideBar] = useState(false)
 
   const p = usePathname()
@@ -20,7 +21,8 @@ const SideDrawer = ({ list }: TSideDrawerProps) => {
       {/* mobile desin */}
       <ul
         className={twMerge(
-          'bg-bg-primary border-primary-700 z-20 flex flex-1 items-start justify-around gap-2 rounded-md border px-2 py-3 text-gray-50 shadow-md md:hidden'
+          'bg-bg-primary border-primary-700 z-20 flex flex-1 items-start justify-around gap-2 rounded-md border px-2 py-3 text-gray-50 shadow-md md:hidden',
+          className
         )}
       >
         {list.map((e, index) => (
@@ -44,7 +46,8 @@ const SideDrawer = ({ list }: TSideDrawerProps) => {
 
       <ul
         className={twMerge(
-          'bg-bg-primary border-primary-900 hidden flex-col items-end justify-start border-l-2 text-gray-50 md:flex'
+          'bg-bg-primary border-primary-900 hidden flex-col items-end justify-start border-l-2 text-gray-50 md:flex',
+          className
         )}
       >
         {list.map((e, index) => (

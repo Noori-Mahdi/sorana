@@ -19,57 +19,37 @@ export type TModleCarAndCompany = {
   }
 }
 
-export type testComapny = { id: string; series: string }
-
 export type TGetProductResponse =
   | { type: 'success'; data: TModleCarAndCompany[] }
-  | { type: 'success'; data: testComapny[] }
   | { type: 'error'; errors: { general: string } }
 
-export async function getCar(companyId?: string): Promise<TGetProductResponse> {
+export async function getCar(): Promise<TGetProductResponse> {
   try {
-    const whereCondition = companyId ? { companyId } : {}
-
     const cars = await prisma.car.findMany({
-      where: whereCondition,
       take: 10,
       include: {
         company: { select: { name: true, image: true } },
       },
     })
 
-    let formattedCars: TModleCarAndCompany[] | { id: string; series: string }[]
+    let formattedCars: TModleCarAndCompany[]
 
-    if (companyId) {
-      // برگشت آرایه ساده {id, series}[]
-      formattedCars = cars.map((car) => ({
-        id: car.id,
+    formattedCars = cars.map((car) => ({
+      id: car.id,
+      image: car.company?.image ?? '',
+      imageCar: car.imageCar ?? '',
+      carInfo: {
+        company: car.company?.name ?? '',
         series: car.series,
-      }))
+        fromYear: car.fromYear,
+        toYear: car.toYear,
+        body: car.body,
+      },
+    }))
 
-      return { type: 'success', data: formattedCars } as {
-        type: 'success'
-        data: { id: string; series: string }[]
-      }
-    } else {
-      // برگشت آرایه TModleCarAndCompany[]
-      formattedCars = cars.map((car) => ({
-        id: car.id,
-        image: car.company?.image ?? '',
-        imageCar: car.imageCar ?? '',
-        carInfo: {
-          company: car.company?.name ?? '',
-          series: car.series,
-          fromYear: car.fromYear,
-          toYear: car.toYear,
-          body: car.body,
-        },
-      }))
-
-      return { type: 'success', data: formattedCars } as {
-        type: 'success'
-        data: TModleCarAndCompany[]
-      }
+    return { type: 'success', data: formattedCars } as {
+      type: 'success'
+      data: TModleCarAndCompany[]
     }
   } catch (err) {
     console.error(err)

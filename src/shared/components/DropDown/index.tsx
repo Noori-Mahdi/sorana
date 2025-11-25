@@ -85,7 +85,7 @@ const DropDown = ({
     return (
       <div
         ref={wrapperRef}
-        className={twMerge('relative my-3 w-full', className)}
+        className={twMerge('relative flex items-center my-3 w-full', className)}
       >
         <div
           className={twMerge(
@@ -130,7 +130,7 @@ const DropDown = ({
         </div>
 
         {isOpen && !disable && !readOnly && (
-          <div className="bg-primary-900 absolute z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-gray-200 shadow-lg">
+          <div className="bg-primary-900 absolute -top-2 translate-y-1/2 z-20 mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-gray-200 shadow-lg">
             {
               options ? (
                 options.map((opt) => (

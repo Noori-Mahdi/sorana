@@ -1,6 +1,6 @@
 'use server'
 
-import prisma from '@/shared/utils/db'
+import prisma from '../../../../prisma.config'
 import bcrypt from 'bcryptjs'
 import { cookies } from 'next/headers'
 

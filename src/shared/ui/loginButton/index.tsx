@@ -12,7 +12,6 @@ type TLoginButtonProps = {
 const LoginButton = ({ hasUser }: TLoginButtonProps) => {
   const router = useRouter()
 
-  if (hasUser)
     return (
       <Button
         className="w-8 h-8 py-1 rounded-full gap-0 text-sm font-medium "
@@ -22,16 +21,6 @@ const LoginButton = ({ hasUser }: TLoginButtonProps) => {
       />
     )
 
-  return (
-    <div className="w-fit md:w-48 hidden md:flex">
-      <Button
-        type="button"
-        label="ورود"
-        className="w-fit px-4 py-1 rounded-md h-fit gap-0 text-sm font-medium"
-        onClick={() => router.push('/login')}
-      />
-    </div>
-  )
 }
 
 export default LoginButton

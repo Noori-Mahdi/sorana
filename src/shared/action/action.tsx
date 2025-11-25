@@ -1,7 +1,7 @@
 'use server'
 
 import { cookies } from 'next/headers'
-import prisma from '@/shared/utils/db'
+import prisma from '../utils/db'
 import jwt from 'jsonwebtoken'
 
 export async function verifyUser() {

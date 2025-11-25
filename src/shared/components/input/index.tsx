@@ -73,7 +73,7 @@ const Input = ({
     >
       <div
         className={twMerge(
-          'shadow-primary-950 relative flex w-full cursor-text items-stretch rounded-md border-2 px-2 text-sm font-medium shadow-sm md:text-base',
+          'shadow-primary-950 relative flex w-full cursor-text items-stretch rounded-lg border-2 px-2 text-sm font-medium shadow-sm md:text-base',
           (error && error?.length > 0) || !isValid.type
             ? 'border-accent-300'
             : 'border-primary-700 focus-within:border-blue-500',
@@ -114,7 +114,7 @@ const Input = ({
               required={required}
               rows={rows}
               className={twMerge(
-                'w-full grow resize-y rounded-md border-gray-500 px-2 py-1 text-right text-lg text-gray-500 outline-0 transition-all duration-300 ease-in-out',
+                'w-full grow resize-y rounded-lg border-gray-500 px-2 py-1 text-right text-lg text-gray-500 outline-0 transition-all duration-300 ease-in-out',
                 className
               )}
               value={value ?? ''}

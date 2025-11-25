@@ -1,5 +1,5 @@
 'use client'
-import { getCar, testComapny } from '@/features/admin-panel/action/carAction'
+import { getCar } from '@/features/admin-panel/action/carAction'
 import { TModelComapny } from '@/features/admin-panel/action/companyAction'
 import Button from '@/shared/components/button'
 import DropDown from '@/shared/components/DropDown'
@@ -12,23 +12,23 @@ export type TSearchFormPorps = {
 const SearchForm = ({ list }: TSearchFormPorps) => {
   const [comapanySelected, setCompanySelected] = useState<string | null>(null)
   const [carSelected, setCarSelected] = useState<string | null>(null)
-  const [listCar, setListCar] = useState<testComapny[]>([])
+  // const [listCar, setListCar] = useState<testComapny[]>([])
   const [loading, setLoading] = useState(false)
 
-  const handleGetCar = async (comapanySelected: string) => {
-    try {
-      setLoading(true)
-      const res = await getCar(comapanySelected)
-      if (res.type === 'success') setListCar(res.data as any)
-    } catch (error) {
-    } finally {
-      setLoading(false)
-    }
-  }
+  // const handleGetCar = async (comapanySelected: string) => {
+  //   try {
+  //     setLoading(true)
+  //     const res = await getCar(comapanySelected)
+  //     if (res.type === 'success') setListCar(res.data as any)
+  //   } catch (error) {
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
-  useEffect(() => {
-    if (comapanySelected) handleGetCar(comapanySelected)
-  }, [comapanySelected])
+  // useEffect(() => {
+  //   if (comapanySelected) handleGetCar(comapanySelected)
+  // }, [comapanySelected])
   return (
     <form className="flex items-center gap-2">
       <DropDown
@@ -47,7 +47,7 @@ const SearchForm = ({ list }: TSearchFormPorps) => {
         label="کمپانی ها"
         value={comapanySelected}
       />
-      <DropDown
+      {/* <DropDown
         disable={comapanySelected === null}
         name="car"
         options={
@@ -63,7 +63,7 @@ const SearchForm = ({ list }: TSearchFormPorps) => {
           setCarSelected(e.target.value as string)
         }}
         value={carSelected}
-      />
+      /> */}
       <Button type="submit" label="search" rounded="small" />
     </form>
   )

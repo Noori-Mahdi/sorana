@@ -52,20 +52,53 @@ model Comment {
 }
 
 model Sold {
-  id        String         @id @default(uuid())
-  user      User           @relation("UserBuys", fields: [userId], references: [id])
+  id        String        @id @default(uuid())
+  user      User          @relation("UserBuys", fields: [userId], references: [id])
   userId    String
-  products  SoldProduct[]  // 👈 هر خرید شامل چند محصول
-  createdAt DateTime       @default(now())
+  products  SoldProduct[] // 👈 هر خرید شامل چند محصول
+  createdAt DateTime      @default(now())
 }
 
-model Product {
-  id          String         @id @default(uuid())
-  name        String         @unique
-  ProductType EProductType
-  image       String
+model SoldProduct {
+  id        String  @id @default(uuid())
+  sold      Sold    @relation(fields: [soldId], references: [id])
+  soldId    String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+  quantity  Int     @default(1)
+  price     Float
+}
 
-  // Disc Detail
+model Car {
+  id            String       @id @default(uuid())
+  series        String       @unique
+  fromYear      DateTime?
+  toYear        DateTime?
+  body          String?
+  brakes        Product[]    @relation("CarBrakes")
+  imageCar      String?
+  companyId     String
+  company       Company      @relation(fields: [companyId], references: [id])
+  countryId     String?
+  country       Country?     @relation(fields: [countryId], references: [id])
+  productBaseId String?
+  productBase   ProductBase? @relation("CarBaseBrakes", fields: [productBaseId], references: [id])
+}
+
+model Company {
+  id    String @id @default(uuid())
+  name  String @unique
+  image String
+  cars  Car[]
+}
+
+model ProductBase {
+  id              String           @id @default(uuid())
+  name            String 
+  ProductBaseType EProductBaseType
+  image           String?
+
+  // مشخصات فنی
   DicsType          EDicsType?
   DiscThicknessMax  Float?
   DiscThicknessMin  Float?
@@ -76,56 +109,69 @@ model Product {
   Drum              Float?
   Height            Float?
   StructureMaterial String?
-
-  // Brake Pads
-  length      Float?
-  width       Float?
-  Thickness   Float?
-  PcsInSet    Float?
-  BrakeSystem String?
-
-  // BRAKE SHOE 
-  Radius Float?
+  length            Float?
+  width             Float?
+  Thickness         Float?
+  PcsInSet          Float?
+  BrakeSystem       String?
+  Radius            Float?
 
   mainTechnicalCode String[] @default([])
   FMSITechnicalCode String[] @default([])
   HIQTechnicalCode  String[] @default([])
   WVATechnicalCode  String[] @default([])
 
+  variants Product[]
+  cars     Car[]     @relation("CarBaseBrakes")
+}
+
+model Product {
+  id            String       @id @default(uuid())
+  productBaseId String? // Nullable موقت
+  productBase   ProductBase? @relation(fields: [productBaseId], references: [id])
+
+  brandId String? // Nullable موقت
+  brand   Brand?  @relation(fields: [brandId], references: [id])
+
+  countryId String?
+  country   Country? @relation(fields: [countryId], references: [id])
+
+  price Float?
+  stock Int?   @default(0)
+
+  soldProducts SoldProduct[]
   cars         Car[]         @relation("CarBrakes")
-  soldProducts SoldProduct[] // 👈 رابطه با SoldProduct (جدول واسطه)
 }
 
-model SoldProduct {
-  id         String   @id @default(uuid())
-  sold       Sold     @relation(fields: [soldId], references: [id])
-  soldId     String
-  product    Product  @relation(fields: [productId], references: [id])
-  productId  String
-  quantity   Int      @default(1)
-  price      Float
-}
-
-model Car {
+model Brand {
   id        String    @id @default(uuid())
-  series    String    @unique
-  fromYear  DateTime?
-  toYear    DateTime?
-  body      String?
-  brakes    Product[] @relation("CarBrakes")
-  imageCar  String?
-  companyId String
-  company   Company   @relation(fields: [companyId], references: [id])
+  name      String    @unique
+  image     String?
+  products  Product[]
+  countryId String
+  country   Country   @relation(fields: [countryId], references: [id])
 }
 
-model Company {
-  id    String @id @default(uuid())
-  name  String @unique
-  image String
-  cars  Car[]
+model FAQ {
+  id        String @id @default(uuid())
+  answer    String
+  questions String
 }
 
-enum EProductType {
+model Country {
+  id           String @id @default(uuid())
+  countryName  String @unique
+  flagImage    String
+  countryImage String
+
+  brands   Brand[]
+  cars     Car[]
+  products Product[]
+}
+
+// enum
+
+enum EProductBaseType {
   frontRotor
   frontBrake
   rearRotor

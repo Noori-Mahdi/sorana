@@ -6,8 +6,8 @@ import { BiPlus } from 'react-icons/bi'
 
 import Button from '@/shared/components/button'
 import Modal from '@/shared/components/Modal'
-import CompanyForm from '../companyForm'
-import CarManagementForm from '../carManagementForm'
+import CompanyForm from '../Copmany/companyForm'
+import CarManagementForm from '../Car/carManagementForm'
 
 import { TButtonMode } from '@/shared/components/GroupButtons/types'
 import { TModelSold } from '../../action/soldAction'

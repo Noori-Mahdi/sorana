@@ -1,7 +1,11 @@
 'use client'
 
 import Container from '@/shared/components/container'
+import ImageBox from '@/shared/components/ImageBox'
 import Link from 'next/link'
+import { FaFacebookSquare, FaInstagram, FaPhone } from 'react-icons/fa'
+import { FaLocationDot } from 'react-icons/fa6'
+import { IoMdMail } from 'react-icons/io'
 import { MdPhone } from 'react-icons/md'
 
 type TFooterProps = {
@@ -18,26 +22,48 @@ const Footer = ({ className }: TFooterProps) => {
 
   return (
     <footer className={className}>
-      <Container className={`bg-gray-950 text-gray-50`}>
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 md:flex-row">
-          <div className="text-lg font-bold">اسم برند</div>
-          <ul className="flex flex-wrap items-center justify-center gap-4 text-center text-xs">
-            {links.map(({ href, label }) => (
-              <li key={href}>
-                <Link
-                  href={href}
-                  className="hover:text-primary-400 cursor-pointer transition"
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <div className="flex flex-col items-center gap-2 text-xs md:items-end">
+      <Container
+        className={`border-primary-900 border-t-2 bg-gray-950 text-gray-50 shadow-2xl`}
+      >
+        <div className="mb-6 flex items-center justify-between">
+          <div className="flex flex-col gap-4 text-sm">
             <div className="flex items-center gap-2">
-              <MdPhone /> <a href="tel:+989000000000">+98 900 000 0000</a>
+              <FaLocationDot />
+              <span>دفتر مرکزی:</span>
+              <span>مشهد- خیابان خبیری - خبیری 23</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <FaPhone />
+              <span> تلفن :</span>
+              <span>05138320000</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <IoMdMail />
+              <span> کدپستی :</span>
+              <span>023154323</span>
             </div>
           </div>
+          <div className="flex flex-col gap-4">
+            <ImageBox
+              imageHidth={50}
+              imageWeight={50}
+              imageAlt="enamad"
+              imageURL="/logo/enamad-3.png"
+            />
+            <div className="flex gap-4">
+              <div>
+                <FaInstagram className="h-6 w-6" />
+              </div>
+              <div>
+                <FaFacebookSquare className="h-6 w-6" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="w= text-center text-sm">
+          {' '}
+          تمامی حقوق فروشگاه سرونا لنت برای شرکت فرانتیک محفوظ می‌باشد و هرگونه
+          کپی‌برداری مستلزم کسب اجازۀ کتبی بوده و پیگرد قانونی خواهد داشت.
         </div>
       </Container>
     </footer>

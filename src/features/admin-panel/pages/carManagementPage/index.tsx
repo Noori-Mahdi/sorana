@@ -1,5 +1,5 @@
 import { getCar } from '@/features/admin-panel/action/carAction'
-import CarList from '../../components/carList'
+import CarList from '../../components/Car/carList'
 import FilterBox from '@/features/admin-panel/components/FilterBox'
 
 const CarManagementPage = async () => {

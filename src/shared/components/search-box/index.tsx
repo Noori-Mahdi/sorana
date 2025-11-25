@@ -12,7 +12,7 @@ type TSearchBoxProps = {
   className?: string
   classNameParent?: string
   placeholder?:string
-  onChange: (e: string) => void
+  onChange?: (e: string) => void
 }
 
 const SearchBox = ({
